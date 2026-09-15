@@ -1,10 +1,16 @@
 import { PageHeader } from "@/components/sections/PageHeader";
 import { CaseCard } from "@/components/sections/CaseCard";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { StatusRail } from "@/components/ui/CaseChip";
 import { getCases, getStatusCounts } from "@/lib/store";
 import { STATUS_META, STATUS_ORDER } from "@/lib/taxonomy";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
+
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
 
 export const metadata = pageMeta({
   title: "The case register",
@@ -31,12 +37,12 @@ export default async function CasesPage() {
           {STATUS_ORDER.map((key) => {
             const meta = STATUS_META[key];
             return (
-              <div key={key} className="rounded-xl border border-white/10 bg-white/[0.04] p-3.5">
-                <dd className="font-data text-xl font-bold text-brand-signal">{statusCounts[key]}</dd>
-                <dt className="mt-1 flex items-center gap-1.5 text-[0.6875rem] leading-tight text-brand-paper/65">
+              <div key={key} className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-3.5">
+                <dt className="order-2 mt-1 flex items-center gap-1.5 text-[0.6875rem] leading-tight text-brand-paper/65">
                   <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${meta.dotClass}`} />
                   {meta.label}
                 </dt>
+                <dd className="order-1 font-data text-xl font-bold text-brand-signal">{statusCounts[key]}</dd>
               </div>
             );
           })}
@@ -51,7 +57,6 @@ export default async function CasesPage() {
             ))}
           </div>
 
-          <DemoNote />
         </div>
       </section>
 

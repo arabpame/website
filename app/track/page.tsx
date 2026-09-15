@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { CaseCard } from "@/components/sections/CaseCard";
 import { StatusRail } from "@/components/ui/CaseChip";
 import { ArrowLink, Eyebrow, SectionHeading, Stat } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { PARTNER_TYPE_LABELS, STATUS_META, STATUS_ORDER } from "@/lib/taxonomy";
 import {
   getCases,
@@ -15,6 +14,13 @@ import {
 } from "@/lib/store";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 import { daysBetween, formatNumber } from "@/lib/utils";
+
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
 
 export const metadata = pageMeta({
   title: "Transparency dashboard",
@@ -116,7 +122,6 @@ export default async function TrackPage() {
             )}
           </dl>
 
-          <DemoNote />
         </div>
       </section>
 
@@ -324,10 +329,6 @@ export default async function TrackPage() {
               })}
           </div>
 
-          <DemoNote>
-            These response figures are invented for the design build. No real office has been assessed,
-            and it would be unfair as well as inaccurate to read them as a real record.
-          </DemoNote>
         </div>
       </section>
 

@@ -1,9 +1,15 @@
 import { PageHeader } from "@/components/sections/PageHeader";
 import { ButtonLink, SectionHeading } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { getScores } from "@/lib/store";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 import { formatNumber } from "@/lib/utils";
+
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
 
 export const metadata = pageMeta({
   title: "EARTH Score",
@@ -133,7 +139,7 @@ export default async function ScorePage() {
                               {entry.movement > 0 ? `+${entry.movement}` : entry.movement}
                             </span>
                           ) : (
-                            <span className="font-data text-[0.6875rem] text-brand-ink/35" title="No change">
+                            <span className="font-data text-[0.6875rem] text-brand-ink/60" title="No change">
                               0
                             </span>
                           )}
@@ -177,7 +183,6 @@ export default async function ScorePage() {
             community climbed.
           </p>
 
-          <DemoNote />
         </div>
       </section>
 

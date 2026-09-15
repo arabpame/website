@@ -22,6 +22,7 @@
     "map:build": "node scripts/build-map.mjs",
     "places:build": "node scripts/build-places.mjs",
     "data:build": "node scripts/compile-data.mjs",
+    "report:delete": "node scripts/report-delete.mjs",
     "assets:build": "node scripts/build-assets.mjs",
     "photos:optimize": "node scripts/optimize-photos.mjs",
     "vercel:login": "npx --yes vercel login",

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { ArrowLink, SectionHeading, Stat } from "@/components/ui/Primitives";
 import { CaseNumber } from "@/components/ui/CaseChip";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { MISSION_TYPE_LABELS } from "@/lib/taxonomy";
 import { getCompletedMissions, getOpenMissions } from "@/lib/store";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
@@ -50,9 +49,9 @@ export default async function ActPage() {
             { label: "Volunteers recorded", value: String(totals.volunteers) },
             { label: "Waste collected", value: `${(totals.waste / 1000).toFixed(1)} t` },
           ].map((item) => (
-            <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-              <dd className="font-data text-xl font-bold text-brand-signal">{item.value}</dd>
-              <dt className="mt-1 text-[0.6875rem] leading-tight text-brand-paper/60">{item.label}</dt>
+            <div key={item.label} className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
+              <dt className="order-2 mt-1 text-[0.6875rem] leading-tight text-brand-paper/60">{item.label}</dt>
+              <dd className="order-1 font-data text-xl font-bold text-brand-signal">{item.value}</dd>
             </div>
           ))}
         </dl>
@@ -74,7 +73,6 @@ export default async function ActPage() {
             ))}
           </div>
 
-          <DemoNote />
         </div>
       </section>
 
@@ -116,11 +114,11 @@ export default async function ActPage() {
 
                   <dl className="grid grid-cols-2 gap-x-6 gap-y-4 lg:col-span-7 lg:grid-cols-4">
                     {mission.results?.map((result) => (
-                      <div key={result.label}>
-                        <dd className="font-data text-xl font-bold text-brand-signal">{result.value}</dd>
-                        <dt className="mt-1 text-[0.6875rem] leading-snug text-brand-paper/60">
+                      <div key={result.label} className="flex flex-col">
+                        <dt className="order-2 mt-1 text-[0.6875rem] leading-snug text-brand-paper/60">
                           {result.label}
                         </dt>
+                        <dd className="order-1 font-data text-xl font-bold text-brand-signal">{result.value}</dd>
                       </div>
                     ))}
                   </dl>

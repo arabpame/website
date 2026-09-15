@@ -1,10 +1,16 @@
 import { PageHeader } from "@/components/sections/PageHeader";
 import { ArrowLink, ButtonLink, CategoryIcon, SectionHeading } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { CATEGORY_META, PARTNER_TYPE_LABELS } from "@/lib/taxonomy";
 import { getPartners, getReferralStats } from "@/lib/store";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 import type { PartnerType } from "@/lib/types";
+
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
 
 export const metadata = pageMeta({
   title: "The action network",
@@ -50,9 +56,9 @@ export default async function ConnectPage() {
             { label: "Referrals sent", value: String(referral.received) },
             { label: "Acknowledged", value: `${referral.acknowledgedRate}%` },
           ].map((item) => (
-            <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-              <dd className="font-data text-xl font-bold text-brand-signal">{item.value}</dd>
-              <dt className="mt-1 text-[0.6875rem] leading-tight text-brand-paper/60">{item.label}</dt>
+            <div key={item.label} className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
+              <dt className="order-2 mt-1 text-[0.6875rem] leading-tight text-brand-paper/60">{item.label}</dt>
+              <dd className="order-1 font-data text-xl font-bold text-brand-signal">{item.value}</dd>
             </div>
           ))}
         </dl>
@@ -149,23 +155,23 @@ export default async function ConnectPage() {
                       </div>
 
                       <dl className="mt-auto grid grid-cols-3 gap-3 border-t border-brand-line pt-4 text-center">
-                        <div>
-                          <dd className="font-data text-sm font-bold text-brand-deep">
+                        <div className="flex flex-col">
+                          <dt className="order-2 text-[0.6875rem] text-brand-ink/55">Received</dt>
+                          <dd className="order-1 font-data text-sm font-bold text-brand-deep">
                             {partner.casesReceived}
                           </dd>
-                          <dt className="text-[0.6875rem] text-brand-ink/55">Received</dt>
                         </div>
-                        <div>
-                          <dd className="font-data text-sm font-bold text-status-progress-text">
+                        <div className="flex flex-col">
+                          <dt className="order-2 text-[0.6875rem] text-brand-ink/55">Acknowledged</dt>
+                          <dd className="order-1 font-data text-sm font-bold text-status-progress-text">
                             {partner.casesAcknowledged}
                           </dd>
-                          <dt className="text-[0.6875rem] text-brand-ink/55">Acknowledged</dt>
                         </div>
-                        <div>
-                          <dd className="font-data text-sm font-bold text-status-resolved-text">
+                        <div className="flex flex-col">
+                          <dt className="order-2 text-[0.6875rem] text-brand-ink/55">Resolved</dt>
+                          <dd className="order-1 font-data text-sm font-bold text-status-resolved-text">
                             {partner.casesResolved}
                           </dd>
-                          <dt className="text-[0.6875rem] text-brand-ink/55">Resolved</dt>
                         </div>
                       </dl>
                     </div>
@@ -175,11 +181,6 @@ export default async function ConnectPage() {
             ))}
           </div>
 
-          <DemoNote>
-            These organisations and their response figures are written for the design build. The agency
-            types are real, but no real office has been assessed and none has received a case through
-            this platform.
-          </DemoNote>
 
           <ArrowLink href="/track" className="mt-8">
             See response rates on the transparency dashboard

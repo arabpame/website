@@ -6,6 +6,13 @@ import { getCaseSlugs, getMissionSlugs, getTrackSlugs } from "@/lib/store";
  * The sitemap is generated from the same store the pages read, so a new case or
  * track cannot be added and then forgotten here.
  */
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [caseSlugs, missionSlugs, trackSlugs] = await Promise.all([
     getCaseSlugs(),

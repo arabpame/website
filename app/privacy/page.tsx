@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { LastReviewed, LegalBody, LegalList, LegalSection } from "@/components/sections/Legal";
-import { CONTACT, IS_DEMO } from "@/lib/constants";
+import { CONTACT } from "@/lib/constants";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -24,20 +24,7 @@ export default function PrivacyPage() {
         ]}
       />
 
-      <LegalBody>
-        {IS_DEMO ? (
-          <div className="rounded-2xl border border-status-referred/30 bg-status-referred/[0.07] p-5">
-            <p className="text-sm font-bold text-status-referred-text">
-              This platform is not yet collecting anything
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-brand-ink/75">
-              EARTHLINK is in its Phase 1 design build. There is no database, no mail service and no
-              analytics. Nothing submitted through any form on this site is stored or transmitted. This
-              notice describes how personal information will be handled once the platform goes live, and
-              it is published now so it can be reviewed before that happens rather than after.
-            </p>
-          </div>
-        ) : null}
+      <LegalBody>
 
         <LegalSection heading="Who is responsible">
           <p>

@@ -4,7 +4,6 @@ import { SITE } from "@/lib/constants";
 import { JsonLd, organisationJsonLd, webSiteJsonLd } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { DemoBanner } from "@/components/layout/DemoBanner";
 import { RevealProvider } from "@/components/layout/Reveal";
 import "@/styles/globals.css";
 
@@ -49,8 +48,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-
-        <DemoBanner />
         <Header />
 
         <main id="main">{children}</main>

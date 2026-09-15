@@ -52,34 +52,6 @@ export const BUILDER = {
   brand: "Enclave",
 } as const;
 
-/**
- * Set to true while the site carried invented sample data, this flag showed the
- * sample-data notices on every screen. It was switched off on 16 September 2026
- * when the Report page went live and the sample cases were replaced by documented
- * 2026 incidents with sources. It is a constant, not an environment variable, so
- * that switching it either way is a deliberate code change.
- */
-export const IS_DEMO = false;
-
-/**
- * The full-width notice at the top of every page, above the header.
- *
- * Paused on 15 September 2026 at the founder's request, for the presentation on
- * 20 September 2026, where the disclaimer will be given in person. The quieter
- * notes stay in place regardless of this flag: the footer notice, the inline notes on the
- * dashboard and case pages, and the notes on the privacy and terms pages.
- *
- * RESTORE after 20 September 2026: set this back to true and push. npm run qa
- * warns on every run while it is false, so it cannot be forgotten quietly.
- */
-export const SHOW_DEMO_BANNER = false;
-
-export const DEMO_NOTICE = {
-  short: "Sample data",
-  long:
-    "Every case, mission, count and organisation shown on this site is sample data created to demonstrate the design. None of it is a real environmental report.",
-} as const;
-
 export const NAV = [
   { href: "/learn", label: "Learn" },
   { href: "/report", label: "Report" },

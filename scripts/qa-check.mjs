@@ -197,26 +197,6 @@ for (const file of sourceFiles) {
 // 6. Project-specific rules
 // ---------------------------------------------------------------------------
 
-// 6a. While IS_DEMO is true, the sample-data banner must be mounted in the layout.
-const constants = read(join(root, "lib", "constants.ts"));
-const layout = read(join(root, "app", "layout.tsx"));
-const isDemo = /export const IS_DEMO = true/.test(constants);
-if (isDemo && !/<DemoBanner\s*\/>/.test(layout)) {
-  fail(
-    "IS_DEMO is true but <DemoBanner /> is not mounted in app/layout.tsx. Sample case data must never be presentable as a real environmental record.",
-    "app/layout.tsx",
-  );
-}
-
-// 6a-ii. The top banner can be paused for a presentation. That is allowed, but it
-// must never be forgotten, so every run says so until it is switched back on.
-if (isDemo && /export const SHOW_DEMO_BANNER = false/.test(constants)) {
-  warn(
-    "The top sample-data banner is PAUSED (SHOW_DEMO_BANNER = false). Set it back to true once the presentation it was paused for is over.",
-    "lib/constants.ts",
-  );
-}
-
 // 6b. Chartreuse must never be small text on the light ground. 1.18:1.
 for (const file of sourceFiles) {
   const src = read(file);
@@ -245,10 +225,9 @@ for (const file of sourceFiles) {
 }
 
 // 6d. Placeholder contact values must not ship.
-if (!isDemo) {
-  for (const m of constants.matchAll(/(\w+):\s*"(TO BE SUPPLIED[^"]*)"/g)) {
-    fail(`Placeholder contact value still present: ${m[1]}`, "lib/constants.ts");
-  }
+const constants = read(join(root, "lib", "constants.ts"));
+for (const m of constants.matchAll(/(\w+):\s*"(TO BE SUPPLIED[^"]*)"/g)) {
+  fail(`Placeholder contact value still present: ${m[1]}`, "lib/constants.ts");
 }
 
 // 6e. The footer year must be computed, never a literal.
@@ -317,7 +296,7 @@ if (!existsSync(join(root, "data", "ph-map.json"))) {
 // 8. Docs must exist
 // ---------------------------------------------------------------------------
 
-for (const doc of ["README.md", "USER_MANUAL.md", "handoff.md", "PROJECT_RULES.md", "DESIGN_DIRECTION.md"]) {
+for (const doc of ["README.md", "docs/USER-MANUAL.md", "docs/DEVELOPER-HANDOFF.md", "docs/FILING-A-REPORT.md", "PROJECT_RULES.md", "DESIGN_DIRECTION.md"]) {
   if (!existsSync(join(root, doc))) fail(`Required document missing: ${doc}`);
 }
 

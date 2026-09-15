@@ -14,7 +14,6 @@ import {
   SectionHeading,
   Stat,
 } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { CORE_FUNCTIONS, FOUNDER } from "@/lib/constants";
 import { STATUS_META, STATUS_ORDER } from "@/lib/taxonomy";
 import {
@@ -30,6 +29,13 @@ import {
 } from "@/lib/store";
 import { pageMeta } from "@/lib/seo";
 import { formatDate, formatNumber } from "@/lib/utils";
+
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
 
 export const metadata = pageMeta({
   title: "See the problem. Connect the people.",
@@ -130,7 +136,7 @@ export default async function HomePage() {
                   <span className="font-data text-xs font-medium tracking-eyebrow text-brand-primary">
                     {fn.number}
                   </span>
-                  <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-brand-ink/35">
+                  <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-brand-ink/60">
                     {fn.name}
                   </span>
                 </div>
@@ -209,7 +215,7 @@ export default async function HomePage() {
                       />
                       <div className="relative flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
                         <div className="flex items-center gap-3">
-                          <span className="font-data text-[0.6875rem] text-brand-paper/35">
+                          <span className="font-data text-[0.6875rem] text-brand-paper/60">
                             {String(meta.step).padStart(2, "0")}
                           </span>
                           <span
@@ -332,9 +338,9 @@ export default async function HomePage() {
 
                 <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-brand-line pt-6">
                   {item.outcome?.map((result) => (
-                    <div key={result.label}>
-                      <dd className="font-data text-xl font-bold text-brand-deep">{result.value}</dd>
-                      <dt className="mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                    <div key={result.label} className="flex flex-col">
+                      <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                      <dd className="order-1 font-data text-xl font-bold text-brand-deep">{result.value}</dd>
                     </div>
                   ))}
                 </dl>
@@ -346,7 +352,6 @@ export default async function HomePage() {
             ))}
           </div>
 
-          <DemoNote />
         </div>
       </section>
 

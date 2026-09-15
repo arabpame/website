@@ -272,15 +272,18 @@ export function Stat({
   onInk?: boolean;
   className?: string;
 }) {
+  // Always rendered inside a <dl>. The label is the <dt> and the value the
+  // <dd>, in that DOM order so the list is valid, with the value shown first
+  // through CSS order so the number stays the headline.
   return (
-    <div className={className}>
-      <p className={cn("font-data text-3xl font-bold tracking-tight sm:text-4xl", onInk ? "text-brand-signal" : "text-brand-deep")}>
+    <div className={cn("flex flex-col", className)}>
+      <dt className={cn("order-2 mt-1.5 text-sm font-semibold", onInk ? "text-brand-paper" : "text-brand-ink")}>{label}</dt>
+      <dd className={cn("order-1 font-data text-3xl font-bold tracking-tight sm:text-4xl", onInk ? "text-brand-signal" : "text-brand-deep")}>
         {value}
         {unit ? <span className="ml-1 text-xl font-medium opacity-70">{unit}</span> : null}
-      </p>
-      <p className={cn("mt-1.5 text-sm font-semibold", onInk ? "text-brand-paper" : "text-brand-ink")}>{label}</p>
+      </dd>
       {basis ? (
-        <p className={cn("mt-1 text-xs leading-relaxed", onInk ? "text-brand-paper/55" : "text-brand-ink/60")}>{basis}</p>
+        <dd className={cn("order-3 mt-1 text-xs leading-relaxed", onInk ? "text-brand-paper/55" : "text-brand-ink/60")}>{basis}</dd>
       ) : null}
     </div>
   );

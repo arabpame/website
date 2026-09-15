@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NAV, SITE } from "@/lib/constants";
+import { NAV } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 /**
@@ -83,7 +83,7 @@ export function Header() {
       )}
     >
       <div className="container flex h-[4.5rem] items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2.5" aria-label={`${SITE.name}, home`}>
+        <Link href="/" className="flex items-center gap-2.5" aria-label="EARTHLINK PH, home">
           <Mark />
           <span className="font-display text-base font-extrabold tracking-tight text-brand-deep">
             EARTHLINK

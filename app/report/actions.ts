@@ -1,10 +1,11 @@
 "use server";
 
 import { createHash } from "node:crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { findPlace, nearestPlace, regionAt, withinPhilippines } from "@/lib/places";
 import { sendReportEmail } from "@/lib/reports/email";
+import { REPORTS_TAG } from "@/lib/reports/db";
 import { getReportStore } from "@/lib/reports/storage";
 import type { EvidenceUpload, NewReport } from "@/lib/reports/types";
 import { CASE_CATEGORIES, URGENCY_LEVELS, type CaseCategory, type Urgency } from "@/lib/types";
@@ -247,6 +248,7 @@ export async function fileReport(form: FormData): Promise<ReportResult> {
   // --- 7. Refresh every page that lists cases ------------------------------
 
   const slug = stored.caseNumber.toLowerCase();
+  revalidateTag(REPORTS_TAG, "max");
   for (const path of ["/", "/map", "/cases", "/track", `/cases/${slug}`, "/sitemap.xml"]) {
     revalidatePath(path);
   }

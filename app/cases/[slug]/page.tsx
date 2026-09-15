@@ -15,6 +15,13 @@ import { STATUS_META, STATUS_ORDER } from "@/lib/taxonomy";
 import { JsonLd, MAX_DESCRIPTION, MAX_PAGE_TITLE, breadcrumbJsonLd, pageMeta, trim } from "@/lib/seo";
 import { daysBetween, formatDate, formatDateShort } from "@/lib/utils";
 
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
+
 export async function generateStaticParams() {
   const slugs = await getCaseSlugs();
   return slugs.map((slug) => ({ slug }));
@@ -95,7 +102,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                   />
                   <span
                     className={`mt-2 hidden text-[0.6875rem] leading-tight sm:block ${
-                      reached ? "text-brand-paper/80" : "text-brand-paper/35"
+                      reached ? "text-brand-paper/80" : "text-brand-paper/55"
                     }`}
                   >
                     {s.label}
@@ -222,9 +229,9 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                   </p>
                   <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
                     {item.outcome.map((result) => (
-                      <div key={result.label}>
-                        <dd className="font-data text-2xl font-bold text-brand-deep">{result.value}</dd>
-                        <dt className="mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                      <div key={result.label} className="flex flex-col">
+                        <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                        <dd className="order-1 font-data text-2xl font-bold text-brand-deep">{result.value}</dd>
                       </div>
                     ))}
                   </dl>

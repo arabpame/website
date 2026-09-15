@@ -51,34 +51,34 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
         ]}
       >
         <dl className="mt-10 grid max-w-3xl gap-4 sm:grid-cols-4">
-          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-            <dd className="text-sm font-bold text-brand-signal">{formatDate(mission.date)}</dd>
-            <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Date</dt>
+          <div className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
+            <dt className="order-2 mt-1 text-[0.6875rem] text-brand-paper/60">Date</dt>
+            <dd className="order-1 text-sm font-bold text-brand-signal">{formatDate(mission.date)}</dd>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-            <dd className="text-sm font-bold text-brand-signal">{mission.municipality}</dd>
-            <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">{mission.province}</dt>
+          <div className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
+            <dt className="order-2 mt-1 text-[0.6875rem] text-brand-paper/60">{mission.province}</dt>
+            <dd className="order-1 text-sm font-bold text-brand-signal">{mission.municipality}</dd>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
+          <div className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
             {mission.capacity === 0 ? (
               <>
-                <dd className="text-sm font-bold leading-snug text-brand-signal">{mission.organiser}</dd>
-                <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Organiser</dt>
+                <dt className="order-2 mt-1 text-[0.6875rem] text-brand-paper/60">Organiser</dt>
+                <dd className="order-1 text-sm font-bold leading-snug text-brand-signal">{mission.organiser}</dd>
               </>
             ) : (
               <>
-                <dd className="font-data text-sm font-bold text-brand-signal">
+                <dt className="order-2 mt-1 text-[0.6875rem] text-brand-paper/60">Places filled</dt>
+                <dd className="order-1 font-data text-sm font-bold text-brand-signal">
                   {mission.registered} / {mission.capacity}
                 </dd>
-                <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Places filled</dt>
               </>
             )}
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-            <dd className="text-sm font-bold text-brand-signal">
+          <div className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
+            <dt className="order-2 mt-1 text-[0.6875rem] text-brand-paper/60">Status</dt>
+            <dd className="order-1 text-sm font-bold text-brand-signal">
               {isCompleted ? "Completed" : mission.capacity === 0 || remaining > 0 ? "Open" : "Waitlist"}
             </dd>
-            <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Status</dt>
           </div>
         </dl>
       </PageHeader>
@@ -93,9 +93,9 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                   <Eyebrow>The measured result</Eyebrow>
                   <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
                     {mission.results.map((result) => (
-                      <div key={result.label}>
-                        <dd className="font-data text-2xl font-bold text-brand-deep">{result.value}</dd>
-                        <dt className="mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                      <div key={result.label} className="flex flex-col">
+                        <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                        <dd className="order-1 font-data text-2xl font-bold text-brand-deep">{result.value}</dd>
                       </div>
                     ))}
                   </dl>

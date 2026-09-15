@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BUILDER, CONTACT, DEMO_NOTICE, FOOTER_NAV, IS_DEMO, SITE } from "@/lib/constants";
+import { BUILDER, CONTACT, FOOTER_NAV, SITE } from "@/lib/constants";
 import { MAP_SOURCE } from "@/lib/map";
 import { Mark } from "@/components/layout/Header";
 
@@ -69,14 +69,6 @@ export function Footer() {
           </nav>
         </div>
 
-        {IS_DEMO ? (
-          <div className="mt-14 rounded-2xl border border-brand-signal/25 bg-brand-signal/[0.06] p-5">
-            <p className="font-data text-[0.6875rem] font-medium uppercase tracking-eyebrow text-brand-signal">
-              {DEMO_NOTICE.short}
-            </p>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-brand-paper/75">{DEMO_NOTICE.long}</p>
-          </div>
-        ) : null}
 
         <div className="mt-12 flex flex-col gap-6 border-t border-white/10 pt-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="space-y-2">

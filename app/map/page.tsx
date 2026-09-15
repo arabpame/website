@@ -2,10 +2,16 @@ import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { MapExplorer } from "@/components/map/MapExplorer";
 import { CategoryIcon, SectionHeading } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { getCases, getHotspots } from "@/lib/store";
 import { MAP_SOURCE } from "@/lib/map";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
+
+/**
+ * Cases can change in the database without a deploy (a report deleted, a status
+ * edited), so this page also rebuilds itself every five minutes. A new report
+ * still appears at once, through revalidatePath in the Server Action.
+ */
+export const revalidate = 300;
 
 export const metadata = pageMeta({
   title: "The EARTH Map",
@@ -32,7 +38,6 @@ export default async function MapPage() {
       <section className="section">
         <div className="container">
           <MapExplorer cases={cases} />
-          <DemoNote />
         </div>
       </section>
 

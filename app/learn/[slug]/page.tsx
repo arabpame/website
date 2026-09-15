@@ -103,9 +103,9 @@ export default async function TrackPage({ params }: { params: Promise<{ slug: st
             { label: "Quizzes", value: String(quizzes) },
             { label: "Level", value: track.level === "foundation" ? "Foundation" : track.level === "intermediate" ? "Intermediate" : "Advanced" },
           ].map((item) => (
-            <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-              <dd className="font-data text-lg font-bold text-brand-signal">{item.value}</dd>
-              <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">{item.label}</dt>
+            <div key={item.label} className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-4">
+              <dt className="order-2 mt-1 text-[0.6875rem] text-brand-paper/60">{item.label}</dt>
+              <dd className="order-1 font-data text-lg font-bold text-brand-signal">{item.value}</dd>
             </div>
           ))}
         </dl>

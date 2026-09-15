@@ -71,7 +71,15 @@ function config() {
   return { url: url.replace(/\/$/, ""), key };
 }
 
-async function request(path: string, init: RequestInit = {}): Promise<Response> {
+/** Every page that lists reports is tagged, so a new filing can clear them all at once. */
+export const REPORTS_TAG = "reports";
+
+/**
+ * A read for a public page: cached by Next for up to five minutes, and cleared
+ * at once by revalidateTag(REPORTS_TAG) after a filing. Writes and the rate
+ * limit count pass fresh: true and are never cached.
+ */
+async function request(path: string, init: RequestInit = {}, fresh = false): Promise<Response> {
   const { url, key } = config();
   const response = await fetch(`${url}${path}`, {
     ...init,
@@ -80,9 +88,7 @@ async function request(path: string, init: RequestInit = {}): Promise<Response> 
       Authorization: `Bearer ${key}`,
       ...(init.headers ?? {}),
     },
-    // Reads on the public pages are revalidated on demand after every insert,
-    // so the fetch itself must never be cached by Next.
-    cache: "no-store",
+    ...(fresh ? { cache: "no-store" as const } : { next: { revalidate: 300, tags: [REPORTS_TAG] } }),
   });
   if (!response.ok) {
     const text = await response.text().catch(() => "");
@@ -180,20 +186,26 @@ export const supabaseStore: ReportStore = {
       ip_hash: `eq.${ipHash}`,
       created_at: `gte.${sinceIso}`,
     });
-    const response = await request(`/rest/v1/reports?${params}`, {
-      headers: { Prefer: "count=exact", Range: "0-0", "Range-Unit": "items" },
-    });
+    const response = await request(
+      `/rest/v1/reports?${params}`,
+      { headers: { Prefer: "count=exact", Range: "0-0", "Range-Unit": "items" } },
+      true,
+    );
     // content-range looks like "0-0/3" or "*/0".
     const range = response.headers.get("content-range") ?? "*/0";
     return Number(range.split("/")[1] ?? 0) || 0;
   },
 
   async insert(report) {
-    const response = await request(`/rest/v1/reports?select=${PUBLIC_COLUMNS},reporter_name,reporter_contact,ip_hash`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Prefer: "return=representation" },
-      body: JSON.stringify(toRow(report)),
-    });
+    const response = await request(
+      `/rest/v1/reports?select=${PUBLIC_COLUMNS},reporter_name,reporter_contact,ip_hash`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Prefer: "return=representation" },
+        body: JSON.stringify(toRow(report)),
+      },
+      true,
+    );
     const [row] = (await response.json()) as Row[];
     if (!row) throw new Error("Supabase insert returned no row.");
     return {
@@ -209,19 +221,19 @@ export const supabaseStore: ReportStore = {
     for (const [i, file] of files.entries()) {
       const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
       const path = `${caseNumber}/${i + 1}.${ext}`;
-      await request(`/storage/v1/object/${BUCKET}/${path}`, {
-        method: "POST",
-        headers: { "Content-Type": file.type, "x-upsert": "true" },
-        body: file.bytes as BodyInit,
-      });
+      await request(
+        `/storage/v1/object/${BUCKET}/${path}`,
+        { method: "POST", headers: { "Content-Type": file.type, "x-upsert": "true" }, body: file.bytes as BodyInit },
+        true,
+      );
       stored.push({ path, type: file.type, size: file.bytes.byteLength });
     }
     if (stored.length > 0) {
-      await request(`/rest/v1/reports?id=eq.${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json", Prefer: "return=minimal" },
-        body: JSON.stringify({ evidence: stored }),
-      });
+      await request(
+        `/rest/v1/reports?id=eq.${id}`,
+        { method: "PATCH", headers: { "Content-Type": "application/json", Prefer: "return=minimal" }, body: JSON.stringify({ evidence: stored }) },
+        true,
+      );
     }
     return stored;
   },
@@ -229,11 +241,11 @@ export const supabaseStore: ReportStore = {
   async signedUrls(files, expiresInSeconds) {
     if (files.length === 0) return [];
     const { url } = config();
-    const response = await request(`/storage/v1/object/sign/${BUCKET}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ expiresIn: expiresInSeconds, paths: files.map((f) => f.path) }),
-    });
+    const response = await request(
+      `/storage/v1/object/sign/${BUCKET}`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ expiresIn: expiresInSeconds, paths: files.map((f) => f.path) }) },
+      true,
+    );
     const signed = (await response.json()) as { signedURL?: string; signedUrl?: string }[];
     return signed
       .map((s) => s.signedURL ?? s.signedUrl ?? "")

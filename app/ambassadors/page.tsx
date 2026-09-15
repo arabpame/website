@@ -170,9 +170,9 @@ export default function AmbassadorsPage() {
                   { label: "Students reached", value: "Tracked" },
                   { label: "Cases resolved", value: "Tracked" },
                 ].map((item) => (
-                  <div key={item.label}>
-                    <dd className="font-data text-lg font-bold text-brand-deep">{item.value}</dd>
-                    <dt className="mt-0.5 text-xs text-brand-ink/60">{item.label}</dt>
+                  <div key={item.label} className="flex flex-col">
+                    <dt className="order-2 mt-0.5 text-xs text-brand-ink/60">{item.label}</dt>
+                    <dd className="order-1 font-data text-lg font-bold text-brand-deep">{item.value}</dd>
                   </div>
                 ))}
               </dl>

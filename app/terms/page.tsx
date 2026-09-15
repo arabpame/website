@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { LastReviewed, LegalBody, LegalList, LegalSection } from "@/components/sections/Legal";
-import { CONTACT, IS_DEMO } from "@/lib/constants";
+import { CONTACT } from "@/lib/constants";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -25,16 +25,6 @@ export default function TermsPage() {
       />
 
       <LegalBody>
-        {IS_DEMO ? (
-          <div className="rounded-2xl border border-status-referred/30 bg-status-referred/[0.07] p-5">
-            <p className="text-sm font-bold text-status-referred-text">Design build</p>
-            <p className="mt-2 text-sm leading-relaxed text-brand-ink/75">
-              EARTHLINK is in its Phase 1 design build. Nothing submitted through this site is stored,
-              sent or acted on, and every case, mission and organisation shown is sample data. These
-              terms describe how the platform will operate once it is live.
-            </p>
-          </div>
-        ) : null}
 
         <LegalSection heading="What EARTHLINK is">
           <p>

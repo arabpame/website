@@ -119,11 +119,11 @@ will point at the placeholder domain.
 
 `PROJECT_RULES.md` is the law and is copied in unchanged from the studio playbook. `npm run
 verify` is the Definition of Done. `DESIGN_DIRECTION.md` records why this site looks the way
-it does, and `handoff.md` is the shared memory for whoever picks this up next.
+it does, and `docs/DEVELOPER-HANDOFF.md` is the shared memory for whoever picks this up next, and `docs/USER-MANUAL.md` is the owner's guide.
 
 ## Not built yet (by design)
 
-Do not add these without reading `handoff.md` first.
+Do not add these without reading `docs/DEVELOPER-HANDOFF.md` first.
 
 - **No accounts, no login, no admin console.** Filed reports are read and updated in the
   Supabase Table Editor until a verification screen exists.

@@ -73,7 +73,7 @@ for (const file of scanFiles) {
   if (rel(file) === "scripts/security-check.mjs") continue;
 
   // Code only. Documentation is expected to QUOTE this anti-pattern in order to
-  // warn about it, and USER_MANUAL.md does exactly that. Flagging prose about a
+  // warn about it, and docs/USER-MANUAL.md does exactly that. Flagging prose about a
   // bug as though it were the bug is how a scanner loses its credibility.
   if (![".ts", ".tsx", ".mjs", ".js"].includes(extname(file))) continue;
 
@@ -152,8 +152,11 @@ if (!/^\.env\*?\.local$|^\.env\*/m.test(gitignore)) {
 for (const file of allFiles) {
   const name = rel(file);
   if (/^\.env(\.|$)/.test(name) && !name.endsWith(".example")) {
-    fail(
-      `${name} exists in the project. It is gitignored, but this folder is inside OneDrive, so it syncs to the cloud regardless. Treat its contents as exposed.`,
+    // A warning, not a failure. The site reads real credentials now, so a
+    // developer machine legitimately holds this file. The exposure is still
+    // real, and it is repeated on every run so it is never forgotten.
+    warn(
+      `${name} is present. It is gitignored, but this folder is inside OneDrive, so it syncs to the cloud regardless. Treat its contents as exposed, and rotate every key in it if a laptop is lost.`,
       name,
     );
   }

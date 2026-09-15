@@ -58,6 +58,16 @@ function config() {
     // quietly turn into a different behaviour.
     throw new Error(`Supabase is not configured. Set ${URL_VAR} and ${KEY_VAR}.`);
   }
+  // The easiest mistake on the dashboard is pasting a key into the URL slot.
+  // Say so plainly instead of failing on every request with "Invalid URL".
+  if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(url.replace(/\/$/, ""))) {
+    throw new Error(
+      `${URL_VAR} must be the Project URL, like https://abcdefghijkl.supabase.co, not a key. Supabase -> Project Settings -> API Keys, top of the page.`,
+    );
+  }
+  if (/^(sb_publishable_|eyJ.*"role":"anon")/.test(key)) {
+    throw new Error(`${KEY_VAR} looks like the public anon key. Use the service_role (or a secret) key, server side only.`);
+  }
   return { url: url.replace(/\/$/, ""), key };
 }
 

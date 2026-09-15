@@ -22,6 +22,7 @@
     "map:build": "node scripts/build-map.mjs",
     "assets:build": "node scripts/build-assets.mjs",
     "photos:optimize": "node scripts/optimize-photos.mjs",
+    "vercel:login": "npx --yes vercel login",
     "verify": "npm run typecheck && npm run contrast && npm run qa && npm run grammar && npm run security && npm run build"
   },
   "dependencies": {

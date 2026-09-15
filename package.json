@@ -23,6 +23,9 @@
     "assets:build": "node scripts/build-assets.mjs",
     "photos:optimize": "node scripts/optimize-photos.mjs",
     "vercel:login": "npx --yes vercel login",
+    "site:status": "node scripts/site-access.mjs status",
+    "site:offline": "node scripts/site-access.mjs offline",
+    "site:online": "node scripts/site-access.mjs online",
     "verify": "npm run typecheck && npm run contrast && npm run qa && npm run grammar && npm run security && npm run build"
   },
   "dependencies": {

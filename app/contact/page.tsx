@@ -73,7 +73,7 @@ export default function ContactPage() {
 
                   <p className="mt-6 border-t border-brand-line pt-5 text-xs leading-relaxed text-brand-ink/55">
                     A telephone number and postal address will be published once the organisation is
-                    formally registered. These email addresses are not live yet.
+                    formally registered. Every channel reaches the founder directly for now.
                   </p>
                 </div>
 

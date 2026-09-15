@@ -31,7 +31,7 @@ You have four accounts. Keep the logins in a password manager, never in a chat o
 |---|---|---|
 | **Vercel** | The website itself. Deployments, the settings that turn intake on, the kill switch. | vercel.com, project `earthlink` |
 | **Supabase** | Every filed report (the `reports` table) and its photographs (the `evidence` bucket). | supabase.com, project `earthlinkph` |
-| **Resend** | Sends the report emails and contact-form messages. Shows what was delivered. | resend.com |
+| **Resend** | Sends the report emails and contact-form messages. Shows what was delivered. | resend.com, your Gmail account |
 | **GitHub** | The code. Every change is a commit here, and pushing to `main` publishes the site. | github.com/arabpame/website |
 
 The code lives in git. The reports live in Supabase. The settings live in Vercel. None of
@@ -51,9 +51,8 @@ It contains every field, a map link, links to the photographs (valid seven days)
 photographs as attachments. The reporter's name and contact are in this email and in the
 database only. They are never on the public page.
 
-Until EARTHLINK has its own domain, the email goes to the address that owns the Resend
-account. If that is the developer's address, they forward it to you. See section 9 to change
-that.
+Until EARTHLINK has its own domain, the email can only go to the address that owns the
+Resend account, which is your own Gmail. See section 9 to change that once a domain exists.
 
 **To check a report, then move it along:**
 
@@ -62,8 +61,8 @@ that.
 3. Change `status` to the next stage by double-clicking the cell. The six values, in order:
    `reported`, `verifying`, `referred`, `progress`, `resolved`, `monitoring`. Save.
 4. The public case page shows the new status within five minutes.
-5. If you referred it to an office, put the office name in `referred_to` is not a column yet,
-   so note it in your own records. Adding referral notes to the page is the next build stage.
+5. The office you referred it to is not recorded on filed reports yet. Note it in your own
+   records. Adding referral notes to the page is the next build stage.
 6. Reply to the reporter yourself from the email if they left a contact.
 
 **Duplicates.** If two people report the same problem, keep the first, delete the second
@@ -97,9 +96,8 @@ stored in the database for these.
   (enquiries use `CONTACT_TO_EMAIL` if that is set).
 - To see whether an email actually went out, open Resend, **Emails**. Each row shows the
   subject and a status: delivered, bounced, or opened.
-- The three addresses shown on the Contact page (`hello@`, `partners@`, `reports@`
-  earthlink.ph) are not live. The page says so. They become real when EARTHLINK owns that
-  domain. Until then the contact form is the only working channel.
+- The Contact page and the footer show your Gmail address for now. When EARTHLINK owns a
+  domain, the developer switches them to addresses at that domain in one place.
 
 ## 8. Checking the site is running
 
@@ -201,6 +199,10 @@ authorities" and the public page counts the days it has waited. That pressure is
 
 **Can this be in Filipino?** Not yet. It is recorded as a real limitation on the
 accessibility page rather than hidden.
+
+**Why does everything come to my Gmail?** Because that address owns the Resend account, and
+Resend delivers only to its owner until a domain is verified. Once you have a domain, any
+address can receive the emails.
 
 **What does it cost to run?** Nothing at current volume. Vercel, Supabase and Resend are all
 on free tiers. What costs money is build time.

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How to file a report on EARTHLINK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #07231E; --deep: #0B3B32; --primary: #0E6B55; --signal: #C2F24D; --signal-600: #A8D92F;
+    --paper: #F1F5F1; --surface: #FFFFFF; --line: #D4DED8;
+    --reported: #DF3023; --verifying: #F79009; --referred: #CA8A04; --progress: #2E90FA; --resolved: #12B76A; --monitoring: #98A2B3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; background: var(--paper); font-family: "Public Sans", system-ui, sans-serif; color: var(--ink); -webkit-font-smoothing: antialiased; }
+  .page { width: 1200px; }
+  .band { background: var(--ink); color: var(--paper); padding: 56px 72px 48px;
+    background-image: linear-gradient(rgba(194,242,77,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(194,242,77,.06) 1px, transparent 1px);
+    background-size: 48px 48px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand svg { width: 44px; height: 44px; }
+  .brand .name { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 28px; letter-spacing: -0.02em; color: var(--paper); }
+  .brand .ph { font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: .18em; color: var(--signal); margin-left: 8px; font-weight: 500; }
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: var(--signal); margin-top: 44px; }
+  h1 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 64px; line-height: 1.02; letter-spacing: -0.03em; margin-top: 14px; max-width: 900px; }
+  h1 em { font-style: normal; color: var(--signal); }
+  .lead { font-size: 21px; line-height: 1.5; color: rgba(241,245,241,.78); margin-top: 22px; max-width: 820px; }
+  .rule { width: 80px; height: 3px; background: var(--signal); margin-top: 26px; }
+  .url { display: inline-block; margin-top: 28px; font-family: "JetBrains Mono", monospace; font-size: 20px; font-weight: 700; color: var(--ink); background: var(--signal); padding: 12px 20px; border-radius: 999px; }
+  .steps { padding: 56px 72px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .step { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 30px 30px 28px; position: relative; }
+  .step .n { font-family: "JetBrains Mono", monospace; font-size: 13px; font-weight: 700; color: var(--primary); letter-spacing: .18em; }
+  .step h2 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.02em; color: var(--deep); margin-top: 8px; }
+  .step ul { list-style: none; margin-top: 16px; }
+  .step li { font-size: 17px; line-height: 1.5; color: rgba(7,35,30,.82); padding-left: 22px; position: relative; margin-top: 8px; }
+  .step li::before { content: ""; position: absolute; left: 0; top: 11px; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+  .step .say { margin-top: 16px; border-left: 3px solid var(--signal-600); padding: 8px 14px; background: rgba(194,242,77,.14); border-radius: 0 12px 12px 0; font-size: 16px; line-height: 1.45; color: var(--deep); }
+  .step .say b { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--primary); display: block; margin-bottom: 4px; }
+  .after { margin: 24px 72px 0; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 30px; }
+  .after h2, .pipe h2 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.02em; color: var(--deep); }
+  .after .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 18px; }
+  .after .cell { background: var(--paper); border-radius: 16px; padding: 18px; }
+  .after .cell .k { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--primary); }
+  .after .cell .v { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 22px; color: var(--deep); margin-top: 6px; letter-spacing: -0.01em; }
+  .after .cell p { font-size: 15px; line-height: 1.45; color: rgba(7,35,30,.72); margin-top: 6px; }
+  .case { font-family: "JetBrains Mono", monospace; }
+  .pipe { margin: 24px 72px 0; background: var(--ink); color: var(--paper); border-radius: 24px; padding: 30px; }
+  .pipe h2 { color: var(--paper); }
+  .pipe p.sub { color: rgba(241,245,241,.7); font-size: 16px; margin-top: 6px; }
+  .rail { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 22px; }
+  .stage .bar { height: 8px; border-radius: 999px; }
+  .stage .t { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 16px; margin-top: 10px; color: var(--paper); }
+  .stage .d { font-size: 13px; line-height: 1.4; color: rgba(241,245,241,.65); margin-top: 4px; }
+  .foot { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; margin: 24px 72px 0; }
+  .box { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 26px 30px; }
+  .box h3 { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 22px; color: var(--deep); letter-spacing: -0.01em; }
+  .box ul { list-style: none; margin-top: 12px; }
+  .box li { font-size: 15.5px; line-height: 1.5; color: rgba(7,35,30,.8); padding-left: 20px; position: relative; margin-top: 6px; }
+  .box li::before { content: ""; position: absolute; left: 0; top: 10px; width: 7px; height: 7px; border-radius: 50%; background: var(--signal-600); }
+  .box.warn { border-color: rgba(202,138,4,.35); background: rgba(202,138,4,.06); }
+  .box.warn li::before { background: var(--referred); }
+  .credit { margin: 28px 72px 44px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: rgba(7,35,30,.55); }
+  .credit .mono { font-family: "JetBrains Mono", monospace; letter-spacing: .1em; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="band">
+    <div class="brand">
+      <svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 2C13.2 2 6 9.1 6 17.9 6 29.5 22 42 22 42s16-12.5 16-24.1C38 9.1 30.8 2 22 2z" fill="#C2F24D"/><path d="M22 9.5c-4.7 0-8.5 3.8-8.5 8.5 0 1.5.4 2.9 1.1 4.2 2.3-3.6 6.4-6.4 12.2-7.6-4.6 1.9-8.1 4.9-10.4 8.9 1.5 1.7 3.6 2.7 5.9 2.7 4.7 0 8.5-3.8 8.5-8.5S26.7 9.5 22 9.5z" fill="#07231E"/></svg>
+      <span class="name">EARTHLINK<span class="ph">PH</span></span>
+    </div>
+    <div class="eyebrow">How to file a report</div>
+    <h1>Four steps. <em>Ninety seconds.</em> One permanent case number.</h1>
+    <p class="lead">Open the Report page on your phone. Each step checks itself before the next one opens, and tells you in plain words if something is missing.</p>
+    <div class="rule"></div>
+    <span class="url">earthlinkph.vercel.app/report</span>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="n">STEP 1 OF 4</div>
+      <h2>What you saw</h2>
+      <ul>
+        <li>Tap one of the seven <strong>categories</strong>: Water, Forest, Waste, Air, Biodiversity, Land, Hazard.</li>
+        <li>Give it a <strong>short title</strong> and <strong>describe</strong> what is happening and since when.</li>
+        <li>Enter the <strong>date</strong> you saw it. Approximate is fine.</li>
+        <li>Choose the <strong>urgency</strong>. Each level says what it means.</li>
+      </ul>
+      <div class="say"><b>Say to the room</b>The category decides which government office the case is routed to.</div>
+    </div>
+    <div class="step">
+      <div class="n">STEP 2 OF 4</div>
+      <h2>Where it is</h2>
+      <ul>
+        <li>Type the <strong>city or municipality</strong> and the <strong>province</strong>. Barangay and landmark are optional.</li>
+        <li>For a Metro Manila city, write <strong>Metro Manila</strong> as the province.</li>
+        <li>"Use my current location" works when you are standing at the site. Not at the venue.</li>
+      </ul>
+      <div class="say"><b>Say to the room</b>The platform knows every city and municipality in the country and places the pin itself.</div>
+    </div>
+    <div class="step">
+      <div class="n">STEP 3 OF 4</div>
+      <h2>Evidence</h2>
+      <ul>
+        <li>Tap <strong>"Tap to add photographs"</strong> and pick two or three from your gallery. Up to ten.</li>
+        <li>Each shows a preview and its size. Photographs are optional.</li>
+      </ul>
+      <div class="say"><b>Say to the room</b>They are resized on the phone before sending, so it works on mobile data.</div>
+    </div>
+    <div class="step">
+      <div class="n">STEP 4 OF 4</div>
+      <h2>About you</h2>
+      <ul>
+        <li>Name and contact are <strong>optional</strong>, or tick <strong>file anonymously</strong>.</li>
+        <li>Tick the <strong>consent box</strong>. This one is required.</li>
+        <li>Check the summary, then tap <strong>File this report</strong>. Two to five seconds.</li>
+      </ul>
+      <div class="say"><b>Say to the room</b>Anonymous reports get a case number and a public page too. Personal details are never published.</div>
+    </div>
+  </div>
+
+  <div class="after">
+    <h2>What everyone sees next</h2>
+    <div class="grid">
+      <div class="cell"><div class="k">On the phone</div><div class="v case">EARTH-2026-0104</div><p>Your case number. Permanent, never reused.</p></div>
+      <div class="cell"><div class="k">On the map</div><div class="v">A new pin</div><p>Tap "See it on the map". The pin carries the category colour.</p></div>
+      <div class="cell"><div class="k">In your inbox</div><div class="v">The email</div><p>Every field and the photographs attached, within seconds.</p></div>
+    </div>
+  </div>
+
+  <div class="pipe">
+    <h2>Then it moves through six public stages</h2>
+    <p class="sub">The same rail appears on every case page, so anyone can see how far along it is.</p>
+    <div class="rail">
+      <div class="stage"><div class="bar" style="background:var(--reported)"></div><div class="t">Reported</div><div class="d">Filed. Nothing checked yet.</div></div>
+      <div class="stage"><div class="bar" style="background:var(--verifying)"></div><div class="t">Under verification</div><div class="d">Checked, duplicates merged.</div></div>
+      <div class="stage"><div class="bar" style="background:var(--referred)"></div><div class="t">Referred</div><div class="d">Sent to the office that can act. Days waiting are counted.</div></div>
+      <div class="stage"><div class="bar" style="background:var(--progress)"></div><div class="t">In progress</div><div class="d">Inspection, order, mission or clean-up under way.</div></div>
+      <div class="stage"><div class="bar" style="background:var(--resolved)"></div><div class="t">Resolved</div><div class="d">Fixed, and the result measured.</div></div>
+      <div class="stage"><div class="bar" style="background:var(--monitoring)"></div><div class="t">Monitoring</div><div class="d">Watched so it does not return.</div></div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="box">
+      <h3>Before the day</h3>
+      <ul>
+        <li>Rehearse twice on your phone, on mobile data, not venue Wi-Fi.</li>
+        <li>Have two or three photographs of a real problem in your gallery. No faces.</li>
+        <li>Decide the city and province in advance and type them.</li>
+        <li>Have your Gmail open on the big screen so the room watches the email land.</li>
+        <li>Afterwards, delete the practice report so the register stays honest.</li>
+      </ul>
+    </div>
+    <div class="box warn">
+      <h3>If something goes wrong</h3>
+      <ul>
+        <li><strong>"Reporting is temporarily unavailable"</strong>: a server setting is missing. Nothing is lost. Tell Erick.</li>
+        <li><strong>"We could not find that city"</strong>: check the spelling of both fields.</li>
+        <li><strong>No email</strong>: the report is still saved and on the map. Check spam.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="credit">
+    <span>Reports are handled under the Data Privacy Act of 2012. Names and contacts are never published.</span>
+    <span class="mono">EARTHLINK PH · SEPTEMBER 2026</span>
+  </div>
+</div>
+</body>
+</html>

@@ -12,11 +12,8 @@ Site: **https://earthlinkph.vercel.app/report**
 - Open the site on your phone and bookmark the Report page.
 - Have two or three photographs in your camera roll. Any real environmental problem you
   have seen. Not photographs of people.
-- Open your inbox on the laptop that is connected to the screen, so the audience can watch
-  the email arrive. Reports are emailed to the address EARTHLINK's Resend account is
-  registered to. Until you have your own domain, that is Erick's inbox, and he will forward
-  them to you. If you want them in your own inbox for the presentation, ask Erick to
-  switch it beforehand.
+- Open your Gmail on the laptop that is connected to the screen, so the audience can watch
+  the email arrive. Every report is emailed to your address within seconds.
 - Decide the location in advance and type it. Do not rely on the venue's GPS. City and
   province are enough. The barangay is optional.
 - File one practice report the day before. If the form says "Reporting is temporarily
@@ -97,7 +94,7 @@ stage puts a verification screen on the site itself.
 | *Reporting is temporarily unavailable* | A server setting is missing | Tell Erick. Nothing is lost. Check the day before, not on the day. |
 | *We could not find that city or municipality* | Spelling, or the wrong province | Check both fields. For NCR cities write *Metro Manila*. |
 | *Several reports have been filed from your connection* | More than five in an hour from one connection | Wait, or use a different connection. This is spam protection. |
-| No email arrives | The report is still saved and on the map | Check the inbox that owns the Resend account, then tell Erick. |
+| No email arrives | The report is still saved and on the map | Check your Gmail spam folder, then tell Erick. |
 | The pin is in the wrong place | The pin is the centre of the city or municipality | Use "Use my current location" when you are at the real site. |
 
 ## Afterwards

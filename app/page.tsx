@@ -116,7 +116,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The five core functions                                           */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line bg-white">
+      <section className="section border-t border-brand-line bg-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <SectionHeading
             eyebrow="The five core functions"
@@ -184,7 +184,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The status pipeline                                               */}
       {/* ---------------------------------------------------------------- */}
-      <section className="on-ink section bg-brand-ink">
+      <section className="on-ink section bg-brand-ink [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
@@ -246,7 +246,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The map                                                           */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line">
+      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -315,7 +315,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Proof: cases that were measured                                   */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section bg-white">
+      <section className="section bg-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <SectionHeading
             eyebrow="Measured, not claimed"
@@ -358,7 +358,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Recent cases                                                      */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line">
+      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
@@ -380,7 +380,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Missions                                                          */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section bg-white">
+      <section className="section bg-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
@@ -459,7 +459,7 @@ export default async function HomePage() {
       {/* the image, so it stays selectable, translatable and readable at    */}
       {/* 375px.                                                             */}
       {/* ---------------------------------------------------------------- */}
-      <section className="on-ink relative overflow-hidden bg-brand-ink">
+      <section className="on-ink relative overflow-hidden bg-brand-ink [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_85%,#0B3B32_0%,#07231E_68%)]"
@@ -507,7 +507,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Learn and EARTH Kids                                              */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line">
+      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="order-2 lg:order-1">
@@ -539,7 +539,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Closing: the dashboard, which is the real closing argument        */}
       {/* ---------------------------------------------------------------- */}
-      <section className="on-ink section bg-brand-ink">
+      <section className="on-ink section bg-brand-ink [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
         <div className="container">
           <SectionHeading
             onInk

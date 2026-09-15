@@ -22,9 +22,12 @@ export const SITE = {
 } as const;
 
 export const CONTACT = {
-  email: "hello@earthlink.ph",
-  reportsEmail: "reports@earthlink.ph",
-  partnersEmail: "partners@earthlink.ph",
+  // The founder's own address for every channel until EARTHLINK owns a domain.
+  // When it does: change these three, verify the domain in Resend, set
+  // FROM_EMAIL and REPORTS_TO_EMAIL in Vercel, redeploy.
+  email: "arabpame@gmail.com",
+  reportsEmail: "arabpame@gmail.com",
+  partnersEmail: "arabpame@gmail.com",
 } as const;
 
 export const FOUNDER = {

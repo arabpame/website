@@ -34,10 +34,10 @@ Runtime dependencies are `next`, `react`, `react-dom`. That is the whole list, o
 
 | Service | Does | Account | Notes |
 |---|---|---|---|
-| **GitHub** `arabpame/website` | Source of truth for code. Push to `main` deploys. | Erick's GitHub | Public repository. Nothing commercial or personal goes into a tracked file. |
-| **Vercel** project `earthlink` | Builds and serves the site. Holds the environment variables. Deployment Protection is the kill switch. | Erick, team `arabpame-7215` | `vercel.json` gates every build behind QA, grammar and security. Domains: `earthlinkph.vercel.app` (canonical), `earthlink-ebon.vercel.app` (original alias). |
-| **Supabase** project `earthlinkph`, ref `wdhxojrunxbtllzcyxby` | Table `public.reports`, bucket `evidence`. | Erick | RLS on with no policies. Server uses the service role key only. |
-| **Resend** | Sends report and enquiry emails. | Erick, `arabpame@gmail.com` | No domain verified, so delivery is limited to the account owner's address. |
+| **GitHub** `arabpame/website` | Source of truth for code. Push to `main` deploys. | The founder's GitHub, `arabpame` | Public repository. Nothing commercial or personal goes into a tracked file. |
+| **Vercel** project `earthlink` | Builds and serves the site. Holds the environment variables. Deployment Protection is the kill switch. | Team `arabpame-7215`, under the founder's Gmail | `vercel.json` gates every build behind QA, grammar and security. Domains: `earthlinkph.vercel.app` (canonical), `earthlink-ebon.vercel.app` (original alias). |
+| **Supabase** project `earthlinkph`, ref `wdhxojrunxbtllzcyxby` | Table `public.reports`, bucket `evidence`. | The founder's Gmail | RLS on with no policies. Server uses the service role key only. |
+| **Resend** | Sends report and enquiry emails. | The founder's Gmail, `arabpame@gmail.com` | No domain verified, so delivery is limited to that address, which is where the founder wants them anyway. |
 | philippines-json-maps (GitHub, MIT) | Source of the map geometry and the gazetteer. | none | Fetched only by build scripts; outputs are committed. |
 
 ## 3. Environment variables and where each value comes from
@@ -263,8 +263,7 @@ tested the same day. A Playwright pass on `/report` is the highest-value test to
 
 | Item | Severity | Notes |
 |---|---|---|
-| Reports go to the Resend account owner, not the founder | High for the founder | No domain verified. Either forward, or buy a domain, verify it in Resend, set `FROM_EMAIL`, change `REPORTS_TO_EMAIL`. |
-| Contact page lists `hello@`, `partners@`, `reports@earthlink.ph`, which do not exist | Medium | The page says they are not live. Replace with real addresses once a domain exists, or remove. Decision for the client. |
+| Every public address is the founder's Gmail | Low | Decided 17 September 2026 as the interim. When a domain exists: verify it in Resend, set `FROM_EMAIL`, and change the three addresses in `lib/constants.ts` `CONTACT`. |
 | No verification screen | Medium | Status changes happen in the Supabase Table Editor. `referred_to` and timeline notes for filed reports are not editable yet. |
 | Documented cases are frozen at research date | Low | Edit `data/source/*.json` and rebuild when a case moves on. |
 | Mobile Lighthouse performance 55 on the home page | Medium | Main-thread work from the hero map SVG and the page weight of the founder photograph. Desktop is 77. Options: lazy-render the hero map below the fold, ship a smaller hero image for phones. |

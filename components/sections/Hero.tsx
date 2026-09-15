@@ -95,6 +95,7 @@ export function Hero({
           alt={`${FOUNDER.name}, environmental advocate and founder of EARTHLINK Philippines, on a forested ridge above a Philippine coastline`}
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover object-[72%_center] lg:object-[60%_center]"
         />

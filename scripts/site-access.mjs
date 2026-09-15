@@ -120,10 +120,11 @@ async function setProtection(on) {
   await api(`/v9/projects/${PROJECT}`, {
     method: "PATCH",
     body: JSON.stringify({
-      // "all", not "all_except_custom_domains". The production alias
-      // earthlink-ebon.vercel.app is registered as a project domain, so the
-      // "except custom domains" variant exempts the one URL that matters and
-      // leaves the site fully public while reporting itself as protected.
+      // "all", not "all_except_custom_domains". The public aliases
+      // (earthlinkph.vercel.app and earthlink-ebon.vercel.app) are registered as
+      // project domains, so the "except custom domains" variant would exempt the
+      // very URLs that matter and leave the site fully public while reporting
+      // itself as protected.
       ssoProtection: on ? { deploymentType: "all" } : null,
     }),
   });

@@ -267,6 +267,38 @@ for (const asset of ["public/icon.svg", "public/apple-touch-icon.png", "public/o
   if (!existsSync(join(root, asset))) fail(`Required asset missing: ${asset}`);
 }
 
+// Every image path written in source has to exist in public/.
+//
+// next build does not check this. A missing one compiles, deploys and then
+// renders as a silent hole on the live site. It happens most often by renaming:
+// a file saved as founder-hero.png.jpg no longer answers to /photos/founder-hero.jpg,
+// and nothing anywhere says so. Twelve more photographs are expected, so this is
+// checked rather than watched for.
+const referenced = new Map();
+for (const file of sourceFiles) {
+  for (const m of read(file).matchAll(/["'`](\/[\w.\-/]+\.(?:png|jpe?g|webp|avif|gif|svg))["'`]/g)) {
+    if (!referenced.has(m[1])) referenced.set(m[1], rel(file));
+  }
+}
+
+for (const [path, where] of referenced) {
+  if (existsSync(join(root, "public", path))) continue;
+
+  // Name the near miss when there is one. The fix is almost always a rename.
+  const dir = join(root, "public", path.slice(0, path.lastIndexOf("/")));
+  const wanted = path.slice(path.lastIndexOf("/") + 1);
+  const stem = wanted.slice(0, wanted.lastIndexOf("."));
+  const near = existsSync(dir)
+    ? readdirSync(dir).filter((f) => f.startsWith(stem) && f !== wanted)
+    : [];
+
+  fail(
+    `Image ${path} is referenced but does not exist in public/.` +
+      (near.length ? ` Found ${near.join(", ")} instead. Rename it, do not re-encode.` : ""),
+    where,
+  );
+}
+
 // The committed map data must exist, or the whole site loses its map.
 if (!existsSync(join(root, "data", "ph-map.json"))) {
   fail("data/ph-map.json is missing. Run npm run map:build.");

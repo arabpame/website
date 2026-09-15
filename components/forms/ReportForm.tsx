@@ -328,7 +328,7 @@ export function ReportForm() {
                     ? "bg-brand-primary text-white"
                     : i === step
                       ? "bg-brand-signal text-brand-ink"
-                      : "bg-brand-paper text-brand-ink/45 ring-1 ring-inset ring-brand-line",
+                      : "bg-brand-paper text-brand-ink/65 ring-1 ring-inset ring-brand-line",
                 )}
               >
                 {i < step ? "✓" : i + 1}
@@ -336,7 +336,7 @@ export function ReportForm() {
               <span
                 className={cn(
                   "text-xs font-semibold",
-                  i === step ? "text-brand-deep" : "text-brand-ink/50",
+                  i === step ? "text-brand-deep" : "text-brand-ink/65",
                 )}
                 aria-current={i === step ? "step" : undefined}
               >
@@ -385,7 +385,7 @@ export function ReportForm() {
                 })}
               </div>
               {form.category ? (
-                <p className="mt-3 text-xs leading-relaxed text-brand-ink/60">
+                <p className="mt-3 text-xs leading-relaxed text-brand-ink/70">
                   {CATEGORY_META[form.category].covers}
                 </p>
               ) : null}
@@ -418,7 +418,7 @@ export function ReportForm() {
                 placeholder="Sacks of household waste have been building up along the creek for about three weeks. The channel is narrower than it was and the rains start next month."
                 className={inputClass(!!errors.description)}
               />
-              <p className="mt-1.5 text-right font-data text-[0.6875rem] text-brand-ink/45">
+              <p className="mt-1.5 text-right font-data text-[0.6875rem] text-brand-ink/65">
                 {form.description.trim().length} characters
               </p>
             </Field>
@@ -459,7 +459,7 @@ export function ReportForm() {
                         <span className="block text-sm font-semibold text-brand-deep">
                           {URGENCY_META[level].label}
                         </span>
-                        <span className="mt-0.5 block text-xs leading-snug text-brand-ink/60">
+                        <span className="mt-0.5 block text-xs leading-snug text-brand-ink/70">
                           {URGENCY_META[level].note}
                         </span>
                       </span>
@@ -496,19 +496,19 @@ export function ReportForm() {
               {form.useLocation ? (
                 <div className="mt-4 rounded-lg border border-brand-primary/25 bg-white p-3" aria-live="polite">
                   {locating ? (
-                    <p className="text-xs text-brand-ink/60">Detecting your location...</p>
+                    <p className="text-xs text-brand-ink/70">Detecting your location...</p>
                   ) : device ? (
                     <>
                       <p className="font-data text-[0.6875rem] text-brand-primary">
                         {device.lat.toFixed(4)} N, {device.lng.toFixed(4)} E
                       </p>
-                      <p className="mt-1 text-xs text-brand-ink/60">
+                      <p className="mt-1 text-xs text-brand-ink/70">
                         Accurate to about {Math.round(device.accuracy)} metres. The city or municipality
                         is worked out from this point when you file.
                       </p>
                     </>
                   ) : (
-                    <p className="text-xs text-brand-ink/60">Waiting for permission...</p>
+                    <p className="text-xs text-brand-ink/70">Waiting for permission...</p>
                   )}
                 </div>
               ) : null}
@@ -623,7 +623,7 @@ export function ReportForm() {
                 <span className="mt-3 block text-sm font-semibold text-brand-deep">
                   {preparing ? "Preparing photographs..." : "Tap to add photographs"}
                 </span>
-                <span className="mx-auto mt-1.5 block max-w-sm text-xs leading-relaxed text-brand-ink/60">
+                <span className="mx-auto mt-1.5 block max-w-sm text-xs leading-relaxed text-brand-ink/70">
                   From your camera or your gallery. JPEG, PNG or WebP.
                   {photos.length > 0 ? ` ${photos.length} of ${MAX_FILES} attached.` : ""}
                 </span>
@@ -643,7 +643,7 @@ export function ReportForm() {
                         className="aspect-[4/3] w-full object-cover"
                       />
                       <div className="flex items-center justify-between gap-2 px-2.5 py-2">
-                        <span className="font-data text-[0.6875rem] text-brand-ink/60">
+                        <span className="font-data text-[0.6875rem] text-brand-ink/70">
                           {formatBytes(photo.file.size)}
                         </span>
                         <button
@@ -823,7 +823,7 @@ export function ReportForm() {
             Back
           </button>
           <div className="flex items-center gap-4">
-            <span className="font-data text-[0.6875rem] text-brand-ink/50">
+            <span className="font-data text-[0.6875rem] text-brand-ink/65">
               Step {step + 1} of {STEPS.length}
             </span>
             <button type="button" onClick={goNext} disabled={busy} className="btn-primary disabled:opacity-60">
@@ -907,7 +907,7 @@ function Field({
           {label}
         </label>
       ) : null}
-      {hint ? <p className="mt-1 text-xs leading-relaxed text-brand-ink/60">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-xs leading-relaxed text-brand-ink/70">{hint}</p> : null}
       <div className={label || hint ? "mt-2.5" : ""}>{children}</div>
       {error ? (
         // Identified in text with a suggested fix, never by colour alone.
@@ -926,7 +926,7 @@ function Field({
 function Summary({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
-      <dt className="text-xs text-brand-ink/55">{label}</dt>
+      <dt className="text-xs text-brand-ink/65">{label}</dt>
       <dd className="max-w-[60%] text-right text-xs font-semibold text-brand-deep">{value}</dd>
     </div>
   );

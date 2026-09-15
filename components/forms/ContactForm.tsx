@@ -129,7 +129,7 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
             </label>
           ))}
         </div>
-        <p className="mt-2.5 text-xs text-brand-ink/55">Routed to {selected.to}.</p>
+        <p className="mt-2.5 text-xs text-brand-ink/65">Routed to {selected.to}.</p>
       </fieldset>
 
       <div className="mt-7 grid gap-6 sm:grid-cols-2">
@@ -168,7 +168,7 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
         <label htmlFor="contact-org" className="block text-sm font-semibold text-brand-deep">
           Organisation, school or barangay
         </label>
-        <p className="mt-1 text-xs text-brand-ink/60">Optional.</p>
+        <p className="mt-1 text-xs text-brand-ink/70">Optional.</p>
         <input
           id="contact-org"
           type="text"
@@ -223,7 +223,7 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
         <button type="submit" disabled={pending} className="btn-primary disabled:opacity-60">
           {pending ? "Sending..." : "Send message"}
         </button>
-        <p className="text-xs leading-relaxed text-brand-ink/55">
+        <p className="text-xs leading-relaxed text-brand-ink/65">
           Handled under the Data Privacy Act of 2012. Never shared or sold.
         </p>
       </div>

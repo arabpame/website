@@ -132,7 +132,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
               <div className="mt-12">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <h2 className="text-display-md">Evidence</h2>
-                  <span className="font-data text-xs text-brand-ink/50">
+                  <span className="font-data text-xs text-brand-ink/65">
                     {item.evidenceCount} {item.evidenceCount === 1 ? "file" : "files"} attached
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                           >
                             {source.title}
                           </a>
-                          <p className="mt-1 font-data text-[0.6875rem] text-brand-ink/55">
+                          <p className="mt-1 font-data text-[0.6875rem] text-brand-ink/65">
                             {source.outlet} · {formatDateShort(source.date)}
                           </p>
                         </li>
@@ -212,7 +212,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                             </span>
                           </div>
                           <p className="mt-2 text-sm leading-relaxed text-brand-ink/75">{entry.note}</p>
-                          <p className="mt-1.5 text-xs text-brand-ink/50">Recorded by {entry.actor}</p>
+                          <p className="mt-1.5 text-xs text-brand-ink/65">Recorded by {entry.actor}</p>
                         </div>
                       </li>
                     );
@@ -230,7 +230,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                   <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4">
                     {item.outcome.map((result) => (
                       <div key={result.label} className="flex flex-col">
-                        <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                        <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/70">{result.label}</dt>
                         <dd className="order-1 font-data text-2xl font-bold text-brand-deep">{result.value}</dd>
                       </div>
                     ))}
@@ -253,7 +253,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                             <span className="block text-sm font-semibold text-brand-deep group-hover:text-brand-primary">
                               {mission.title}
                             </span>
-                            <span className="mt-0.5 block font-data text-xs text-brand-ink/55">
+                            <span className="mt-0.5 block font-data text-xs text-brand-ink/65">
                               {formatDateShort(mission.date)} · {mission.organiser}
                             </span>
                           </span>
@@ -349,7 +349,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                 </div>
 
                 {item.source === "report" ? (
-                  <p className="flex items-start gap-2 text-xs leading-relaxed text-brand-ink/55">
+                  <p className="flex items-start gap-2 text-xs leading-relaxed text-brand-ink/65">
                     <svg aria-hidden="true" viewBox="0 0 16 16" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-primary" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                       <circle cx="8" cy="8" r="6.5" />
                       <path d="M8 7.2v4M8 4.9h.01" />
@@ -390,7 +390,7 @@ function Fact({
 }) {
   return (
     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
-      <dt className="text-xs text-brand-ink/55">{label}</dt>
+      <dt className="text-xs text-brand-ink/65">{label}</dt>
       <dd
         className={`max-w-[65%] text-right text-xs font-semibold ${mono ? "font-data" : ""} ${
           highlight ? "text-status-reported-text" : "text-brand-deep"

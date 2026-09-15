@@ -116,7 +116,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The five core functions                                           */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line bg-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="section border-t border-brand-line bg-white">
         <div className="container">
           <SectionHeading
             eyebrow="The five core functions"
@@ -136,7 +136,7 @@ export default async function HomePage() {
                   <span className="font-data text-xs font-medium tracking-eyebrow text-brand-primary">
                     {fn.number}
                   </span>
-                  <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-brand-ink/60">
+                  <span className="font-display text-xs font-bold uppercase tracking-eyebrow text-brand-ink/70">
                     {fn.name}
                   </span>
                 </div>
@@ -184,7 +184,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The status pipeline                                               */}
       {/* ---------------------------------------------------------------- */}
-      <section className="on-ink section bg-brand-ink [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="on-ink section bg-brand-ink">
         <div className="container">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
@@ -246,7 +246,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The map                                                           */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_1100px]">
         <div className="container">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -266,11 +266,11 @@ export default async function HomePage() {
                       <p className="truncate text-sm font-semibold text-brand-deep">
                         {spot.place}, {spot.municipality}
                       </p>
-                      <p className="text-xs text-brand-ink/55">{spot.province}</p>
+                      <p className="text-xs text-brand-ink/65">{spot.province}</p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
                       {spot.cases.slice(0, 4).map((c) => (
-                        <span key={c.caseNumber} className="text-brand-ink/50">
+                        <span key={c.caseNumber} className="text-brand-ink/65">
                           <CategoryIcon category={c.category} />
                         </span>
                       ))}
@@ -282,7 +282,7 @@ export default async function HomePage() {
                 ))}
               </div>
 
-              <p className="mt-4 text-xs leading-relaxed text-brand-ink/55">
+              <p className="mt-4 text-xs leading-relaxed text-brand-ink/65">
                 Recurring sites, meaning more than one case at the same barangay. This is the view that
                 turns reporting into prevention.
               </p>
@@ -315,7 +315,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Proof: cases that were measured                                   */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section bg-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="section bg-white">
         <div className="container">
           <SectionHeading
             eyebrow="Measured, not claimed"
@@ -332,14 +332,14 @@ export default async function HomePage() {
               >
                 <CaseChip caseNumber={item.caseNumber} status={item.status} />
                 <h3 className="mt-4 text-lg font-bold leading-snug text-brand-deep">{item.title}</h3>
-                <p className="mt-1 text-xs text-brand-ink/55">
+                <p className="mt-1 text-xs text-brand-ink/65">
                   {[item.barangay, item.municipality, item.province].filter(Boolean).join(", ")}
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-brand-line pt-6">
                   {item.outcome?.map((result) => (
                     <div key={result.label} className="flex flex-col">
-                      <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                      <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/70">{result.label}</dt>
                       <dd className="order-1 font-data text-xl font-bold text-brand-deep">{result.value}</dd>
                     </div>
                   ))}
@@ -358,7 +358,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Recent cases                                                      */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="section border-t border-brand-line">
         <div className="container">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
@@ -380,7 +380,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Missions                                                          */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section bg-white [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="section bg-white">
         <div className="container">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHeading
@@ -408,7 +408,7 @@ export default async function HomePage() {
                   <h3 className="mt-3 text-base font-bold leading-snug text-brand-deep transition-colors group-hover:text-brand-primary">
                     {mission.title}
                   </h3>
-                  <p className="mt-2 text-xs text-brand-ink/55">
+                  <p className="mt-2 text-xs text-brand-ink/65">
                     {[mission.barangay, mission.municipality, mission.province].filter(Boolean).join(", ")}
                   </p>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-brand-ink/70">
@@ -417,7 +417,7 @@ export default async function HomePage() {
 
                   <div className="mt-5 border-t border-brand-line pt-4">
                     <div className="flex items-center justify-between gap-3 text-xs">
-                      <span className="font-data text-brand-ink/60">
+                      <span className="font-data text-brand-ink/70">
                         {mission.registered} of {mission.capacity} places
                       </span>
                       <span
@@ -459,7 +459,7 @@ export default async function HomePage() {
       {/* the image, so it stays selectable, translatable and readable at    */}
       {/* 375px.                                                             */}
       {/* ---------------------------------------------------------------- */}
-      <section className="on-ink relative overflow-hidden bg-brand-ink [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="on-ink relative overflow-hidden bg-brand-ink">
         <div
           aria-hidden="true"
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_85%,#0B3B32_0%,#07231E_68%)]"
@@ -507,7 +507,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Learn and EARTH Kids                                              */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="section border-t border-brand-line">
         <div className="container">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="order-2 lg:order-1">
@@ -539,7 +539,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* Closing: the dashboard, which is the real closing argument        */}
       {/* ---------------------------------------------------------------- */}
-      <section className="on-ink section bg-brand-ink [content-visibility:auto] [contain-intrinsic-size:auto_900px]">
+      <section className="on-ink section bg-brand-ink">
         <div className="container">
           <SectionHeading
             onInk

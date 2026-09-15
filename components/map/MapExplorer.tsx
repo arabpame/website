@@ -104,7 +104,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
                         <CategoryIcon category={key} className="h-4 w-4" />
                       </span>
                       <span className="flex-1 text-sm font-medium text-brand-ink">{meta.label}</span>
-                      <span className="font-data text-xs text-brand-ink/50">{count}</span>
+                      <span className="font-data text-xs text-brand-ink/65">{count}</span>
                     </button>
                   </li>
                 );
@@ -134,7 +134,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
                     >
                       <span aria-hidden="true" className={cn("h-2.5 w-2.5 shrink-0 rounded-full", meta.dotClass)} />
                       <span className="flex-1 text-sm font-medium text-brand-ink">{meta.label}</span>
-                      <span className="font-data text-xs text-brand-ink/50">{count}</span>
+                      <span className="font-data text-xs text-brand-ink/65">{count}</span>
                     </button>
                   </li>
                 );
@@ -257,7 +257,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
           <h2 className="text-sm font-bold text-brand-deep">
             The {visible.length} cases currently shown
           </h2>
-          <p className="mt-1 text-xs text-brand-ink/60">
+          <p className="mt-1 text-xs text-brand-ink/70">
             The same data as the map above, as a list, so it is reachable by keyboard and by screen
             reader.
           </p>
@@ -273,7 +273,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm font-semibold text-brand-deep">{c.title}</span>
-                    <span className="block text-xs text-brand-ink/55">
+                    <span className="block text-xs text-brand-ink/65">
                       {c.municipality}, {c.province} · {formatDateShort(c.reportedOn)}
                     </span>
                   </span>
@@ -282,7 +282,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
               </li>
             ))}
             {visible.length === 0 ? (
-              <li className="px-4 py-10 text-center text-sm text-brand-ink/60">
+              <li className="px-4 py-10 text-center text-sm text-brand-ink/70">
                 No cases match these filters.
               </li>
             ) : null}

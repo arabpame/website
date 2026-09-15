@@ -139,7 +139,7 @@ export default async function ConnectPage() {
                       className="reveal flex flex-col rounded-2xl border border-brand-line bg-brand-paper p-5"
                     >
                       <p className="text-sm font-bold leading-snug text-brand-deep">{partner.name}</p>
-                      <p className="mt-1.5 text-xs text-brand-ink/55">{partner.coverage}</p>
+                      <p className="mt-1.5 text-xs text-brand-ink/65">{partner.coverage}</p>
 
                       <div className="mt-4 flex flex-wrap gap-1.5">
                         {partner.handles.map((cat) => (
@@ -156,19 +156,19 @@ export default async function ConnectPage() {
 
                       <dl className="mt-auto grid grid-cols-3 gap-3 border-t border-brand-line pt-4 text-center">
                         <div className="flex flex-col">
-                          <dt className="order-2 text-[0.6875rem] text-brand-ink/55">Received</dt>
+                          <dt className="order-2 text-[0.6875rem] text-brand-ink/65">Received</dt>
                           <dd className="order-1 font-data text-sm font-bold text-brand-deep">
                             {partner.casesReceived}
                           </dd>
                         </div>
                         <div className="flex flex-col">
-                          <dt className="order-2 text-[0.6875rem] text-brand-ink/55">Acknowledged</dt>
+                          <dt className="order-2 text-[0.6875rem] text-brand-ink/65">Acknowledged</dt>
                           <dd className="order-1 font-data text-sm font-bold text-status-progress-text">
                             {partner.casesAcknowledged}
                           </dd>
                         </div>
                         <div className="flex flex-col">
-                          <dt className="order-2 text-[0.6875rem] text-brand-ink/55">Resolved</dt>
+                          <dt className="order-2 text-[0.6875rem] text-brand-ink/65">Resolved</dt>
                           <dd className="order-1 font-data text-sm font-bold text-status-resolved-text">
                             {partner.casesResolved}
                           </dd>

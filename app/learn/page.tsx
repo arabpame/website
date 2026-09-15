@@ -92,10 +92,10 @@ export default async function LearnPage() {
                   </p>
 
                   <div className="mt-5 flex items-center justify-between gap-3 border-t border-brand-line pt-4">
-                    <span className="font-data text-xs text-brand-ink/55">
+                    <span className="font-data text-xs text-brand-ink/65">
                       {track.lessons.length} {pluralise(track.lessons.length, "lesson")}
                     </span>
-                    <span className="font-data text-xs text-brand-ink/55">{minutes} min</span>
+                    <span className="font-data text-xs text-brand-ink/65">{minutes} min</span>
                   </div>
                 </Link>
               );

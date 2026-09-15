@@ -107,7 +107,7 @@ export default async function ScorePage() {
                         <th
                           key={h}
                           scope="col"
-                          className={`px-4 py-3 font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/60 ${
+                          className={`px-4 py-3 font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/70 ${
                             i >= 2 ? "text-right" : ""
                           }`}
                         >
@@ -139,7 +139,7 @@ export default async function ScorePage() {
                               {entry.movement > 0 ? `+${entry.movement}` : entry.movement}
                             </span>
                           ) : (
-                            <span className="font-data text-[0.6875rem] text-brand-ink/60" title="No change">
+                            <span className="font-data text-[0.6875rem] text-brand-ink/70" title="No change">
                               0
                             </span>
                           )}
@@ -147,7 +147,7 @@ export default async function ScorePage() {
                       </td>
                       <td className="px-4 py-4">
                         <span className="block text-sm font-semibold text-brand-deep">{entry.name}</span>
-                        <span className="block text-xs text-brand-ink/55">
+                        <span className="block text-xs text-brand-ink/65">
                           {KIND_LABEL[entry.kind]} · {entry.municipality}, {entry.province}
                         </span>
                       </td>
@@ -178,7 +178,7 @@ export default async function ScorePage() {
             </div>
           </div>
 
-          <p className="mt-4 text-xs leading-relaxed text-brand-ink/55">
+          <p className="mt-4 text-xs leading-relaxed text-brand-ink/65">
             Movement is the change in rank since the previous period. A positive number means the
             community climbed.
           </p>

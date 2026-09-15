@@ -177,7 +177,7 @@ export default function PrivacyPage() {
 
         <LastReviewed date="14 September 2026" />
 
-        <p className="text-sm text-brand-ink/60">
+        <p className="text-sm text-brand-ink/70">
           See also the{" "}
           <Link href="/terms" className="font-medium text-brand-primary underline underline-offset-2">
             terms of use

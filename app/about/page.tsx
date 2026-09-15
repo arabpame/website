@@ -70,7 +70,7 @@ export default function AboutPage() {
 
               <div className="mt-10 border-t border-brand-line pt-6">
                 <p className="text-sm font-bold text-brand-deep">{FOUNDER.name}</p>
-                <p className="mt-0.5 text-sm text-brand-ink/60">{FOUNDER.role}</p>
+                <p className="mt-0.5 text-sm text-brand-ink/70">{FOUNDER.role}</p>
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function AboutPage() {
                   <h3 className="mt-2 text-xl font-bold text-brand-deep group-hover:text-brand-primary">
                     {fn.name}
                   </h3>
-                  <p className="mt-1 text-xs text-brand-ink/55">{fn.title}</p>
+                  <p className="mt-1 text-xs text-brand-ink/65">{fn.title}</p>
                 </div>
                 <div className="lg:col-span-6">
                   <p className="text-sm leading-relaxed text-brand-ink/70">{fn.summary}</p>
@@ -249,7 +249,7 @@ export default function AboutPage() {
 
               <div className="mt-8 border-l-2 border-brand-signal pl-5">
                 <p className="text-lg font-medium text-brand-deep">{FOUNDER.name}</p>
-                <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/55">
+                <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/65">
                   {FOUNDER.role}
                 </p>
               </div>

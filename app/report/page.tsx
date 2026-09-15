@@ -100,7 +100,7 @@ export default function ReportPage() {
                             <span className={`block text-sm font-semibold ${meta.textClass}`}>
                               {meta.label}
                             </span>
-                            <span className="mt-0.5 block text-xs leading-relaxed text-brand-ink/60">
+                            <span className="mt-0.5 block text-xs leading-relaxed text-brand-ink/70">
                               {meta.meaning}
                             </span>
                           </span>
@@ -111,7 +111,7 @@ export default function ReportPage() {
 
                   <div className="mt-6 border-t border-brand-line pt-5">
                     <StatusRail status="referred" />
-                    <p className="mt-2 text-xs leading-relaxed text-brand-ink/55">
+                    <p className="mt-2 text-xs leading-relaxed text-brand-ink/65">
                       This rail appears on every case, so you can see at a glance how far along it is.
                     </p>
                   </div>

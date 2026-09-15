@@ -61,7 +61,7 @@ export default async function MapPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="text-base font-bold leading-snug text-brand-deep">{spot.place}</p>
-                    <p className="mt-0.5 text-xs text-brand-ink/55">
+                    <p className="mt-0.5 text-xs text-brand-ink/65">
                       {spot.municipality}, {spot.province}
                     </p>
                   </div>
@@ -77,7 +77,7 @@ export default async function MapPage() {
                         href={`/cases/${c.slug}`}
                         className="group flex items-start gap-2.5 text-xs leading-snug text-brand-ink/70 transition-colors hover:text-brand-deep"
                       >
-                        <span className="mt-px shrink-0 text-brand-ink/50">
+                        <span className="mt-px shrink-0 text-brand-ink/65">
                           <CategoryIcon category={c.category} className="h-3.5 w-3.5" />
                         </span>
                         <span className="group-hover:underline">{c.title}</span>
@@ -90,7 +90,7 @@ export default async function MapPage() {
           </div>
 
           {hotspots.length === 0 ? (
-            <p className="mt-12 text-sm text-brand-ink/60">
+            <p className="mt-12 text-sm text-brand-ink/70">
               No place currently has more than one case.
             </p>
           ) : null}

@@ -138,11 +138,11 @@ export default async function TrackPage({ params }: { params: Promise<{ slug: st
                           {lesson.summary}
                         </p>
                         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-                          <span className="inline-flex items-center gap-1.5 font-data text-[0.6875rem] text-brand-ink/55">
+                          <span className="inline-flex items-center gap-1.5 font-data text-[0.6875rem] text-brand-ink/65">
                             <FormatIcon format={lesson.format} />
                             {FORMAT_LABEL[lesson.format]}
                           </span>
-                          <span className="font-data text-[0.6875rem] text-brand-ink/55">
+                          <span className="font-data text-[0.6875rem] text-brand-ink/65">
                             {lesson.duration} min
                           </span>
                           {lesson.hasQuiz ? (
@@ -176,7 +176,7 @@ export default async function TrackPage({ params }: { params: Promise<{ slug: st
                   <p className="mt-3 text-sm leading-relaxed text-brand-ink/75">{track.audience}</p>
                   <div className="mt-5 border-t border-brand-line pt-4">
                     <CategoryChip category={track.category} />
-                    <p className="mt-3 text-xs leading-relaxed text-brand-ink/60">
+                    <p className="mt-3 text-xs leading-relaxed text-brand-ink/70">
                       Reports in this category go to the same offices this track teaches you about.
                     </p>
                   </div>
@@ -219,7 +219,7 @@ export default async function TrackPage({ params }: { params: Promise<{ slug: st
                 <h3 className="text-base font-bold leading-snug text-brand-deep group-hover:text-brand-primary">
                   {other.title}
                 </h3>
-                <p className="mt-2 font-data text-xs text-brand-ink/55">
+                <p className="mt-2 font-data text-xs text-brand-ink/65">
                   {other.lessons.length} {pluralise(other.lessons.length, "lesson")}
                 </p>
               </Link>

@@ -47,7 +47,7 @@ export function LegalList({ items }: { items: (string | ReactNode)[] }) {
 
 export function LastReviewed({ date }: { date: string }) {
   return (
-    <p className="rounded-xl border border-brand-line bg-brand-paper px-4 py-3 font-data text-xs text-brand-ink/60">
+    <p className="rounded-xl border border-brand-line bg-brand-paper px-4 py-3 font-data text-xs text-brand-ink/70">
       Last reviewed {date}
     </p>
   );

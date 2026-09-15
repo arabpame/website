@@ -171,7 +171,7 @@ export default function AmbassadorsPage() {
                   { label: "Cases resolved", value: "Tracked" },
                 ].map((item) => (
                   <div key={item.label} className="flex flex-col">
-                    <dt className="order-2 mt-0.5 text-xs text-brand-ink/60">{item.label}</dt>
+                    <dt className="order-2 mt-0.5 text-xs text-brand-ink/70">{item.label}</dt>
                     <dd className="order-1 font-data text-lg font-bold text-brand-deep">{item.value}</dd>
                   </div>
                 ))}

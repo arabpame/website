@@ -16,7 +16,7 @@ export function Footer() {
       <div className="container py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <Link href="/" className="flex items-center gap-2.5" aria-label={`${SITE.name}, home`}>
+            <Link href="/" className="flex items-center gap-2.5" aria-label="EARTHLINK PH, home">
               <Mark />
               <span className="font-display text-base font-extrabold tracking-tight text-brand-paper">
                 EARTHLINK

@@ -80,7 +80,7 @@ export default async function CasesPage() {
                   >
                     <StatusRail status={key} />
                     <span className={`text-sm font-semibold ${meta.textClass}`}>{meta.label}</span>
-                    <span className="w-full text-xs leading-relaxed text-brand-ink/60 sm:w-auto sm:flex-1">
+                    <span className="w-full text-xs leading-relaxed text-brand-ink/70 sm:w-auto sm:flex-1">
                       {meta.meaning}
                     </span>
                   </li>

@@ -37,7 +37,7 @@ export default function ContactPage() {
                   <Eyebrow>Direct</Eyebrow>
                   <dl className="mt-5 space-y-5">
                     <div>
-                      <dt className="text-xs text-brand-ink/55">General enquiries</dt>
+                      <dt className="text-xs text-brand-ink/65">General enquiries</dt>
                       <dd className="mt-1">
                         <a
                           href={`mailto:${CONTACT.email}`}
@@ -48,7 +48,7 @@ export default function ContactPage() {
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs text-brand-ink/55">Partnerships and referrals</dt>
+                      <dt className="text-xs text-brand-ink/65">Partnerships and referrals</dt>
                       <dd className="mt-1">
                         <a
                           href={`mailto:${CONTACT.partnersEmail}`}
@@ -59,7 +59,7 @@ export default function ContactPage() {
                       </dd>
                     </div>
                     <div>
-                      <dt className="text-xs text-brand-ink/55">Case enquiries</dt>
+                      <dt className="text-xs text-brand-ink/65">Case enquiries</dt>
                       <dd className="mt-1">
                         <a
                           href={`mailto:${CONTACT.reportsEmail}`}
@@ -71,7 +71,7 @@ export default function ContactPage() {
                     </div>
                   </dl>
 
-                  <p className="mt-6 border-t border-brand-line pt-5 text-xs leading-relaxed text-brand-ink/55">
+                  <p className="mt-6 border-t border-brand-line pt-5 text-xs leading-relaxed text-brand-ink/65">
                     A telephone number and postal address will be published once the organisation is
                     formally registered. Every channel reaches the founder directly for now.
                   </p>

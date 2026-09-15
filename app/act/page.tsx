@@ -225,7 +225,7 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
         className="group flex h-full flex-col rounded-2xl border border-brand-line bg-brand-surface p-6 shadow-soft transition-all duration-300 ease-expo hover:-translate-y-0.5 hover:border-brand-primary/30 hover:shadow-lift"
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <span className="rounded-full bg-brand-paper px-2.5 py-1 font-data text-[0.6875rem] font-medium uppercase tracking-eyebrow text-brand-ink/60 ring-1 ring-inset ring-brand-line">
+          <span className="rounded-full bg-brand-paper px-2.5 py-1 font-data text-[0.6875rem] font-medium uppercase tracking-eyebrow text-brand-ink/70 ring-1 ring-inset ring-brand-line">
             {MISSION_TYPE_LABELS[mission.type]}
           </span>
           <span className="font-data text-xs font-semibold text-brand-primary">
@@ -236,7 +236,7 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
         <h3 className="mt-4 text-lg font-bold leading-snug text-brand-deep transition-colors group-hover:text-brand-primary">
           {mission.title}
         </h3>
-        <p className="mt-1.5 text-xs text-brand-ink/55">
+        <p className="mt-1.5 text-xs text-brand-ink/65">
           {[mission.barangay, mission.municipality, mission.province].filter(Boolean).join(", ")}
         </p>
 
@@ -251,7 +251,7 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
               </li>
             ))}
             {mission.requirements.length > 2 ? (
-              <li className="pl-[0.875rem] text-xs text-brand-ink/45">
+              <li className="pl-[0.875rem] text-xs text-brand-ink/65">
                 and {mission.requirements.length - 2} more
               </li>
             ) : null}
@@ -260,14 +260,14 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
 
         <div className="mt-6 border-t border-brand-line pt-4">
           {mission.capacity === 0 ? (
-            <p className="text-xs text-brand-ink/60">
+            <p className="text-xs text-brand-ink/70">
               <span className="font-semibold text-brand-deep">{mission.organiser}</span>
               {mission.status === "completed" ? " · completed" : " · places managed by the organiser"}
             </p>
           ) : (
           <>
           <div className="flex items-center justify-between gap-3 text-xs">
-            <span className="font-data text-brand-ink/60">
+            <span className="font-data text-brand-ink/70">
               {mission.registered} of {mission.capacity} places
             </span>
             <span

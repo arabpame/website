@@ -94,7 +94,7 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                   <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
                     {mission.results.map((result) => (
                       <div key={result.label} className="flex flex-col">
-                        <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/60">{result.label}</dt>
+                        <dt className="order-2 mt-1 text-xs leading-snug text-brand-ink/70">{result.label}</dt>
                         <dd className="order-1 font-data text-2xl font-bold text-brand-deep">{result.value}</dd>
                       </div>
                     ))}
@@ -153,7 +153,7 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                   <PhotoFrame aspect="4/3" tone={isCompleted ? 1 : 2} />
                   <PhotoFrame aspect="4/3" tone={isCompleted ? 3 : 0} />
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-brand-ink/55">
+                <p className="mt-3 text-xs leading-relaxed text-brand-ink/65">
                   Mission photography is supplied by the organiser and published against the case.
                 </p>
               </div>
@@ -205,12 +205,12 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                             ? `${remaining} ${pluralise(remaining, "place")} left`
                             : "Full, waitlist open"}
                         </p>
-                        <span className="font-data text-xs text-brand-ink/55">{pct}%</span>
+                        <span className="font-data text-xs text-brand-ink/65">{pct}%</span>
                       </div>
                       <div aria-hidden="true" className="mt-3 h-2 overflow-hidden rounded-full bg-brand-line">
                         <div className="h-full rounded-full bg-brand-primary" style={{ width: `${pct}%` }} />
                       </div>
-                      <p className="mt-3 font-data text-xs text-brand-ink/55">
+                      <p className="mt-3 font-data text-xs text-brand-ink/65">
                         {mission.registered} of {mission.capacity} volunteers registered
                       </p>
 
@@ -237,7 +237,7 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                           status={linkedCase.status}
                           className="mt-3"
                         />
-                        <p className="mt-3 text-xs leading-relaxed text-brand-ink/60">
+                        <p className="mt-3 text-xs leading-relaxed text-brand-ink/70">
                           A mission raised from a verified case, rather than an activity looking for a
                           location. That is the whole difference.
                         </p>
@@ -279,7 +279,7 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                           >
                             {source.title}
                           </a>
-                          <p className="mt-0.5 font-data text-[0.6875rem] text-brand-ink/55">
+                          <p className="mt-0.5 font-data text-[0.6875rem] text-brand-ink/65">
                             {source.outlet} · {formatDate(source.date)}
                           </p>
                         </li>

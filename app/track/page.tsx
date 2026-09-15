@@ -218,13 +218,13 @@ export default async function TrackPage() {
                 </caption>
                 <thead>
                   <tr className="border-b border-brand-line bg-brand-paper">
-                    <th scope="col" className="px-5 py-3 font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/60">
+                    <th scope="col" className="px-5 py-3 font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/70">
                       Case
                     </th>
-                    <th scope="col" className="px-5 py-3 font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/60">
+                    <th scope="col" className="px-5 py-3 font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/70">
                       Referred to
                     </th>
-                    <th scope="col" className="px-5 py-3 text-right font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/60">
+                    <th scope="col" className="px-5 py-3 text-right font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/70">
                       Days waiting
                     </th>
                   </tr>
@@ -240,7 +240,7 @@ export default async function TrackPage() {
                           <span className="mt-0.5 block text-sm font-semibold text-brand-deep group-hover:underline">
                             {item.title}
                           </span>
-                          <span className="mt-0.5 block text-xs text-brand-ink/55">
+                          <span className="mt-0.5 block text-xs text-brand-ink/65">
                             {item.municipality}, {item.province}
                           </span>
                         </Link>
@@ -265,7 +265,7 @@ export default async function TrackPage() {
                   ))}
                   {waiting.length === 0 ? (
                     <tr>
-                      <td colSpan={3} className="px-5 py-10 text-center text-sm text-brand-ink/60">
+                      <td colSpan={3} className="px-5 py-10 text-center text-sm text-brand-ink/70">
                         Nothing is currently waiting on a referral.
                       </td>
                     </tr>
@@ -275,7 +275,7 @@ export default async function TrackPage() {
             </div>
           </div>
 
-          <p className="mt-4 text-xs leading-relaxed text-brand-ink/55">
+          <p className="mt-4 text-xs leading-relaxed text-brand-ink/65">
             Counted from the date the referral was sent. Colour marks longer waits, and the number is
             always shown, so the table is readable without relying on colour.
           </p>
@@ -311,11 +311,11 @@ export default async function TrackPage() {
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-sm font-bold leading-snug text-brand-deep">{partner.name}</p>
-                        <p className="mt-0.5 text-xs text-brand-ink/55">
+                        <p className="mt-0.5 text-xs text-brand-ink/65">
                           {PARTNER_TYPE_LABELS[partner.type]} · {partner.coverage}
                         </p>
                       </div>
-                      <span className="shrink-0 font-data text-xs text-brand-ink/55">
+                      <span className="shrink-0 font-data text-xs text-brand-ink/65">
                         {partner.casesReceived} received
                       </span>
                     </div>
@@ -417,9 +417,9 @@ function Bar({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-3">
-        <dt className="text-xs text-brand-ink/60">{label}</dt>
+        <dt className="text-xs text-brand-ink/70">{label}</dt>
         <dd className="font-data text-xs font-semibold text-brand-deep">
-          {count} <span className="text-brand-ink/45">({pct}%)</span>
+          {count} <span className="text-brand-ink/65">({pct}%)</span>
         </dd>
       </div>
       <div aria-hidden="true" className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-brand-line">

@@ -59,7 +59,7 @@ export default function ReportPage() {
             { label: "Anonymous option", value: "Yes" },
           ].map((item) => (
             <div key={item.label} className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-              <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-paper/45">
+              <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-paper/60">
                 {item.label}
               </p>
               <p className="mt-1.5 text-sm font-semibold text-brand-signal">{item.value}</p>

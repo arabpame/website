@@ -245,13 +245,13 @@ export function Hero({
                 href={`/cases/${latest.slug}`}
                 className="group mt-10 block rounded-2xl border border-white/10 bg-white/[0.04] p-4 transition-colors duration-300 hover:border-brand-signal/40 hover:bg-white/[0.07]"
               >
-                <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-paper/45">
+                <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-paper/60">
                   Most recent case
                 </p>
                 <p className="mt-2 text-sm font-semibold leading-snug text-brand-paper">
                   {latest.title}
                 </p>
-                <p className="mt-1 text-xs text-brand-paper/55">
+                <p className="mt-1 text-xs text-brand-paper/60">
                   {[latest.barangay, latest.municipality, latest.province].filter(Boolean).join(", ")}
                 </p>
                 <CaseChip caseNumber={latest.caseNumber} status={latest.status} onInk className="mt-3" />

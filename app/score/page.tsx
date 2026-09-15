@@ -205,7 +205,7 @@ export default async function ScorePage() {
                   <li key={rule.action} className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2 bg-white/[0.03] px-5 py-4">
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-semibold text-brand-paper">{rule.action}</p>
-                      <p className="mt-1 text-xs leading-relaxed text-brand-paper/55">{rule.note}</p>
+                      <p className="mt-1 text-xs leading-relaxed text-brand-paper/60">{rule.note}</p>
                     </div>
                     <span className="shrink-0 font-data text-sm font-bold text-brand-signal">
                       {rule.points}
@@ -214,7 +214,7 @@ export default async function ScorePage() {
                 ))}
               </ul>
 
-              <p className="mt-5 text-xs leading-relaxed text-brand-paper/55">
+              <p className="mt-5 text-xs leading-relaxed text-brand-paper/60">
                 Points are never awarded for filing a report alone. If they were, the fastest way to the
                 top of this table would be to file a hundred reports nobody verified.
               </p>

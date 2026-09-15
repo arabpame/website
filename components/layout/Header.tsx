@@ -83,7 +83,7 @@ export function Header() {
       )}
     >
       <div className="container flex h-[4.5rem] items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="EARTHLINK PH, home">
+        <Link href="/" className="flex items-center gap-2.5">
           <Mark />
           <span className="font-display text-base font-extrabold tracking-tight text-brand-deep">
             EARTHLINK
@@ -91,6 +91,7 @@ export function Header() {
               PH
             </span>
           </span>
+          <span className="sr-only">, home</span>
         </Link>
 
         <nav aria-label="Main" className="hidden lg:block">

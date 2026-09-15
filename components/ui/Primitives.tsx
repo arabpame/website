@@ -283,7 +283,7 @@ export function Stat({
         {unit ? <span className="ml-1 text-xl font-medium opacity-70">{unit}</span> : null}
       </dd>
       {basis ? (
-        <dd className={cn("order-3 mt-1 text-xs leading-relaxed", onInk ? "text-brand-paper/55" : "text-brand-ink/70")}>{basis}</dd>
+        <dd className={cn("order-3 mt-1 text-xs leading-relaxed", onInk ? "text-brand-paper/60" : "text-brand-ink/70")}>{basis}</dd>
       ) : null}
     </div>
   );

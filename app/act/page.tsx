@@ -102,7 +102,7 @@ export default async function ActPage() {
                     <h3 className="mt-2 text-lg font-bold leading-snug text-brand-paper">
                       {mission.title}
                     </h3>
-                    <p className="mt-1.5 text-xs text-brand-paper/55">
+                    <p className="mt-1.5 text-xs text-brand-paper/60">
                       {[mission.barangay, mission.municipality, mission.province].filter(Boolean).join(", ")}
                     </p>
                     {mission.caseNumber ? (

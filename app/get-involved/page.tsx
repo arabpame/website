@@ -134,7 +134,7 @@ export default async function GetInvolvedPage() {
                   >
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-brand-paper">{mission.title}</p>
-                      <p className="mt-0.5 font-data text-xs text-brand-paper/55">
+                      <p className="mt-0.5 font-data text-xs text-brand-paper/60">
                         {formatDateShort(mission.date)} · {mission.municipality}, {mission.province}
                       </p>
                     </div>

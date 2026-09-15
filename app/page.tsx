@@ -231,7 +231,7 @@ export default async function HomePage() {
                           </span>
                         </div>
                       </div>
-                      <p className="relative mt-2 pl-[3.25rem] text-xs leading-relaxed text-brand-paper/55">
+                      <p className="relative mt-2 pl-[3.25rem] text-xs leading-relaxed text-brand-paper/60">
                         {meta.meaning}
                       </p>
                     </li>
@@ -246,7 +246,7 @@ export default async function HomePage() {
       {/* ---------------------------------------------------------------- */}
       {/* The map                                                           */}
       {/* ---------------------------------------------------------------- */}
-      <section className="section border-t border-brand-line [content-visibility:auto] [contain-intrinsic-size:auto_1100px]">
+      <section className="section border-t border-brand-line">
         <div className="container">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div>

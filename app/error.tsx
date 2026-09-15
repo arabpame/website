@@ -49,7 +49,7 @@ export default function Error({
         </div>
 
         {error.digest ? (
-          <p className="mt-10 font-data text-xs text-brand-paper/40">
+          <p className="mt-10 font-data text-xs text-brand-paper/60">
             Reference {error.digest}
           </p>
         ) : null}

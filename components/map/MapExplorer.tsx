@@ -241,7 +241,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
               </Link>
             </div>
           ) : (
-            <p className="relative mt-4 text-center text-xs text-brand-paper/45">
+            <p className="relative mt-4 text-center text-xs text-brand-paper/60">
               Select a pin to see the case. Every pin is a real, numbered, trackable case.
             </p>
           )}

@@ -118,7 +118,7 @@ export default function AmbassadorsPage() {
               <ButtonLink href="/get-involved" variant="signal" className="mt-8">
                 Start an application
               </ButtonLink>
-              <p className="mt-4 text-xs leading-relaxed text-brand-paper/50">
+              <p className="mt-4 text-xs leading-relaxed text-brand-paper/60">
                 The application form is Phase 5 of the build. For now this goes to the general
                 involvement page.
               </p>

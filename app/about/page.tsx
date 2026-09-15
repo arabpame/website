@@ -281,7 +281,7 @@ export default function AboutPage() {
               </a>{" "}
               of {BUILDER.studio}.
             </p>
-            <p className="mt-4 text-sm leading-relaxed text-brand-paper/55">
+            <p className="mt-4 text-sm leading-relaxed text-brand-paper/60">
               Administrative boundary data is from the Philippine Statistics Authority, via the
               philippines-json-maps project, under the MIT licence.
             </p>

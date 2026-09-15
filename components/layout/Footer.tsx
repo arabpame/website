@@ -16,7 +16,7 @@ export function Footer() {
       <div className="container py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div>
-            <Link href="/" className="flex items-center gap-2.5" aria-label="EARTHLINK PH, home">
+            <Link href="/" className="flex items-center gap-2.5">
               <Mark />
               <span className="font-display text-base font-extrabold tracking-tight text-brand-paper">
                 EARTHLINK
@@ -24,17 +24,18 @@ export function Footer() {
                   PH
                 </span>
               </span>
+          <span className="sr-only">, home</span>
             </Link>
 
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-brand-paper/70">{SITE.tagline}</p>
 
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-brand-paper/55">
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-brand-paper/60">
               A platform for reporting environmental problems in Philippine communities, routing them to the
               people who can act, and showing publicly whether anything was done.
             </p>
 
             <div className="mt-8 space-y-1.5">
-              <p className="text-xs uppercase tracking-eyebrow text-brand-paper/40">Get in touch</p>
+              <p className="text-xs uppercase tracking-eyebrow text-brand-paper/60">Get in touch</p>
               <p>
                 <a
                   href={`mailto:${CONTACT.email}`}
@@ -72,10 +73,10 @@ export function Footer() {
 
         <div className="mt-12 flex flex-col gap-6 border-t border-white/10 pt-8 lg:flex-row lg:items-start lg:justify-between">
           <div className="space-y-2">
-            <p className="text-xs text-brand-paper/50">
+            <p className="text-xs text-brand-paper/60">
               {year} {SITE.name}. All rights reserved.
             </p>
-            <p className="text-xs leading-relaxed text-brand-paper/40">
+            <p className="text-xs leading-relaxed text-brand-paper/60">
               Map boundaries from{" "}
               <a
                 href={MAP_SOURCE.url}
@@ -89,7 +90,7 @@ export function Footer() {
             </p>
           </div>
 
-          <p className="text-xs text-brand-paper/50">
+          <p className="text-xs text-brand-paper/60">
             Built with care by{" "}
             <a
               href={BUILDER.url}

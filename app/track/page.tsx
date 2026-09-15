@@ -175,21 +175,21 @@ export default async function TrackPage() {
                   <p className="mt-1 text-xs text-brand-paper/65">
                     Median days, report to resolved
                   </p>
-                  <p className="mt-1 text-[0.6875rem] leading-relaxed text-brand-paper/45">
+                  <p className="mt-1 text-[0.6875rem] leading-relaxed text-brand-paper/60">
                     Across the {resolutionTimes.length} cases that reached a measured result.
                   </p>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
                   <p className="font-data text-2xl font-bold text-brand-signal">{referral.acknowledgedRate}%</p>
                   <p className="mt-1 text-xs text-brand-paper/65">Referrals acknowledged</p>
-                  <p className="mt-1 text-[0.6875rem] leading-relaxed text-brand-paper/45">
+                  <p className="mt-1 text-[0.6875rem] leading-relaxed text-brand-paper/60">
                     {referral.acknowledged} of {referral.received} referrals confirmed received.
                   </p>
                 </div>
                 <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
                   <p className="font-data text-2xl font-bold text-brand-signal">{referral.resolvedRate}%</p>
                   <p className="mt-1 text-xs text-brand-paper/65">Referrals resolved</p>
-                  <p className="mt-1 text-[0.6875rem] leading-relaxed text-brand-paper/45">
+                  <p className="mt-1 text-[0.6875rem] leading-relaxed text-brand-paper/60">
                     {referral.resolved} of {referral.received}. The gap is the work.
                   </p>
                 </div>

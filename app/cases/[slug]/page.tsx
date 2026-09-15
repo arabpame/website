@@ -78,7 +78,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
               <span aria-hidden="true" className={`h-3 w-3 rounded-full ${meta.dotClass}`} />
               <span className="text-lg font-bold text-brand-paper">{meta.label}</span>
             </div>
-            <span className="font-data text-xs text-brand-paper/50">
+            <span className="font-data text-xs text-brand-paper/60">
               Step {meta.step} of 6 · reported {ageDays} days ago
             </span>
           </div>
@@ -102,7 +102,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                   />
                   <span
                     className={`mt-2 hidden text-[0.6875rem] leading-tight sm:block ${
-                      reached ? "text-brand-paper/80" : "text-brand-paper/55"
+                      reached ? "text-brand-paper/80" : "text-brand-paper/60"
                     }`}
                   >
                     {s.label}

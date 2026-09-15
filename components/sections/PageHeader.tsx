@@ -35,7 +35,7 @@ export function PageHeader({
       <div className="container relative py-14 sm:py-16 lg:py-20">
         {breadcrumb && breadcrumb.length > 0 ? (
           <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-data text-[0.6875rem] text-brand-paper/45">
+            <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-data text-[0.6875rem] text-brand-paper/60">
               {breadcrumb.map((crumb, i) => (
                 <li key={crumb.href} className="flex items-center gap-2">
                   {i > 0 ? <span aria-hidden="true">/</span> : null}

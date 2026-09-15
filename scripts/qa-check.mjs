@@ -208,6 +208,15 @@ if (isDemo && !/<DemoBanner\s*\/>/.test(layout)) {
   );
 }
 
+// 6a-ii. The top banner can be paused for a presentation. That is allowed, but it
+// must never be forgotten, so every run says so until it is switched back on.
+if (isDemo && /export const SHOW_DEMO_BANNER = false/.test(constants)) {
+  warn(
+    "The top sample-data banner is PAUSED (SHOW_DEMO_BANNER = false). Set it back to true once the presentation it was paused for is over.",
+    "lib/constants.ts",
+  );
+}
+
 // 6b. Chartreuse must never be small text on the light ground. 1.18:1.
 for (const file of sourceFiles) {
   const src = read(file);

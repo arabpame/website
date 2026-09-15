@@ -151,6 +151,7 @@ on every surface a case appears on.
 | **Map data committed, not fetched at build.** | `npm run build` never touches the network. A fresh laptop with no internet still builds. |
 | **Adaptive simplification tolerance in the map build.** | A flat tolerance collapsed Bongao island and lost Tawi-Tawi, the country's southernmost province, from a national map. Tolerance now scales with each island's size. |
 | **`IS_DEMO` is a constant, not an env var.** | Turning off the sample-data notice must be an intentional code change, not a setting someone flips in a dashboard. |
+| **`SHOW_DEMO_BANNER` pauses only the top banner.** | The founder asked for the full-width notice to come down for a presentation. Pausing it is a separate flag so the footer, inline and legal-page notes stay, and QA warns on every run until it is restored. |
 | **Forms validate but do not submit, and say so.** | A form that silently discards a real environmental report is worse than no form. Someone will try this. |
 | **Tailwind 3, not 4.** | The studio's brand-token convention lives in `tailwind.config.ts`; v4 moves tokens into CSS and would change its shape on a client build. |
 | **`lib/store.ts` as the only data boundary.** | Phase 2 rewrites one file. No page component changes. |

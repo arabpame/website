@@ -70,6 +70,19 @@ export const BUILDER = {
  */
 export const IS_DEMO = true;
 
+/**
+ * The full-width notice at the top of every page, above the header.
+ *
+ * Paused on 15 September 2026 at the founder's request, for the presentation on
+ * 20 September 2026, where the disclaimer will be given in person. The quieter
+ * notes stay in place regardless of this flag: the footer notice, the inline notes on the
+ * dashboard and case pages, and the notes on the privacy and terms pages.
+ *
+ * RESTORE after 20 September 2026: set this back to true and push. npm run qa
+ * warns on every run while it is false, so it cannot be forgotten quietly.
+ */
+export const SHOW_DEMO_BANNER = false;
+
 export const DEMO_NOTICE = {
   short: "Sample data",
   long:

@@ -1,4 +1,4 @@
-import { DEMO_NOTICE, IS_DEMO } from "@/lib/constants";
+import { DEMO_NOTICE, IS_DEMO, SHOW_DEMO_BANNER } from "@/lib/constants";
 
 /**
  * The sample-data notice.
@@ -15,9 +15,12 @@ import { DEMO_NOTICE, IS_DEMO } from "@/lib/constants";
  *
  * scripts/qa-check.mjs fails the build if IS_DEMO is true and this banner is not
  * mounted in the root layout.
+ *
+ * SHOW_DEMO_BANNER pauses only this top banner, for a presentation, without
+ * touching the quieter notes elsewhere. QA warns on every run while it is paused.
  */
 export function DemoBanner() {
-  if (!IS_DEMO) return null;
+  if (!IS_DEMO || !SHOW_DEMO_BANNER) return null;
 
   return (
     <div className="border-b border-brand-signal-600/30 bg-brand-signal/[0.18]">

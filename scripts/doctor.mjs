@@ -77,6 +77,20 @@ const npmVersion = run("npm", ["--version"]);
 if (npmVersion) pass(`npm ${npmVersion}`);
 else problem("npm is not on PATH.", "Reinstall Node.js, which bundles npm.");
 
+// A fresh Windows install ships with the PowerShell execution policy set to
+// Restricted. npm resolves to npm.ps1 inside PowerShell, so every `npm run`
+// dies with "running scripts is disabled on this system" even though Node and
+// npm are installed and healthy. It is a one-time, per-user setting.
+if (platform() === "win32") {
+  const policy = run("powershell", ["-NoProfile", "-Command", "Get-ExecutionPolicy"]);
+  if (policy && /^(Restricted|AllSigned|Undefined)$/i.test(policy)) {
+    problem(
+      `PowerShell's execution policy is "${policy}", so "npm run" fails in PowerShell with "running scripts is disabled on this system".`,
+      "Run once in PowerShell: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned\n         (or use Command Prompt / Git Bash, where npm does not go through PowerShell)",
+    );
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Git
 // ---------------------------------------------------------------------------

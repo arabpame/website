@@ -41,3 +41,7 @@ next-env.d.ts
 
 # Studio commercial notes. Never commit: the GitHub repo for this project is public.
 PRIVATE-NOTES.md
+
+# Photograph masters. The full-size originals, kept out of git: public/photos
+# holds the web-sized derivatives that npm run photos:optimize produces.
+photos-master/

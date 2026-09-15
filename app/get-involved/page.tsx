@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { ArrowLink, SectionHeading } from "@/components/ui/Primitives";
+import { ArrowLink, PhotoFrame, SectionHeading } from "@/components/ui/Primitives";
+import { FOUNDER } from "@/lib/constants";
 import { getOpenMissions } from "@/lib/store";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 import { formatDateShort, pluralise } from "@/lib/utils";
@@ -58,6 +59,19 @@ export default async function GetInvolvedPage() {
           { label: "Get involved", href: "/get-involved" },
         ]}
       />
+
+      {/* Key art. Commissioned portraiture, not documentation of a case. */}
+      <section className="pb-4">
+        <div className="container">
+          <PhotoFrame
+            aspect="21/9"
+            src={FOUNDER.photo.hero}
+            alt={`${FOUNDER.name} on a forested ridge above a Philippine coastline`}
+            position="right"
+            priority
+          />
+        </div>
+      </section>
 
       <section className="section">
         <div className="container">

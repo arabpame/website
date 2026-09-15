@@ -26,7 +26,17 @@ const warn = (msg, where) => warnings.push(where ? `${msg}\n         ${where}` :
 // Collect source files
 // ---------------------------------------------------------------------------
 
-const SKIP_DIRS = new Set(["node_modules", ".next", ".git", "out", ".cache", "docs"]);
+// photos-master holds the full-size photograph originals. It is gitignored and
+// never shipped, so the page-weight budget below does not apply to it.
+const SKIP_DIRS = new Set([
+  "node_modules",
+  ".next",
+  ".git",
+  "out",
+  ".cache",
+  "docs",
+  "photos-master",
+]);
 
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir)) {

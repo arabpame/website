@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/sections/Hero";
 import { CaseCard } from "@/components/sections/CaseCard";
@@ -14,7 +15,7 @@ import {
   Stat,
 } from "@/components/ui/Primitives";
 import { DemoNote } from "@/components/layout/DemoBanner";
-import { CORE_FUNCTIONS } from "@/lib/constants";
+import { CORE_FUNCTIONS, FOUNDER } from "@/lib/constants";
 import { STATUS_META, STATUS_ORDER } from "@/lib/taxonomy";
 import {
   getCases,
@@ -439,6 +440,61 @@ export default async function HomePage() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------------- */}
+      {/* The advocate                                                      */}
+      {/*                                                                   */}
+      {/* Commissioned portraiture, deliberately kept away from the case     */}
+      {/* register and the map. It introduces the person accountable for the */}
+      {/* platform. It is never presented as documentation of a real case.   */}
+      {/* The type is live text over a transparent cut-out, never baked into */}
+      {/* the image, so it stays selectable, translatable and readable at    */}
+      {/* 375px.                                                             */}
+      {/* ---------------------------------------------------------------- */}
+      <section className="on-ink relative overflow-hidden bg-brand-ink">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_72%_85%,#0B3B32_0%,#07231E_68%)]"
+        />
+
+        <div className="container relative">
+          <div className="grid items-end gap-10 lg:grid-cols-2 lg:gap-12">
+            <div className="py-16 lg:py-24">
+              <Eyebrow onInk>The advocate</Eyebrow>
+
+              <h2 className="mt-4 text-display-md text-brand-paper">
+                Your voice matters.{" "}
+                <span className="text-brand-signal">Only if somebody counts it.</span>
+              </h2>
+
+              <p className="mt-6 max-w-md text-base leading-relaxed text-brand-paper/70">
+                EARTHLINK Philippines is the advocacy of {FOUNDER.name}. A problem posted to a
+                comment section scrolls away by the evening. The same problem reported here becomes
+                a numbered case with a named responsible office and a clock that anyone can check.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <ButtonLink href="/report" variant="signal">
+                  Report a problem
+                </ButtonLink>
+                <ButtonLink href="/about#advocate" variant="outline-ink">
+                  Meet the advocate
+                </ButtonLink>
+              </div>
+            </div>
+
+            <div className="relative -mb-px h-72 sm:h-96 lg:h-[30rem]">
+              <Image
+                src={FOUNDER.photo.cutout}
+                alt={`${FOUNDER.name}, founder of EARTHLINK Philippines`}
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-contain object-bottom"
+              />
+            </div>
           </div>
         </div>
       </section>

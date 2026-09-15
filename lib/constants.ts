@@ -39,6 +39,19 @@ export const CONTACT = {
 export const FOUNDER = {
   name: "Adam Tryler Guttierez",
   role: "Founder, EARTHLINK Philippines",
+  shortName: "Adam",
+  /**
+   * Supplied by the founder. These are commissioned portraits, not documentation
+   * of a specific clean-up on a specific date, so nothing here is captioned as
+   * evidence and no case, mission or location is attached to them. The sample
+   * data rules in PROJECT_RULES apply to photographs too.
+   */
+  photo: {
+    field: "/photos/founder-field.jpg",
+    hero: "/photos/founder-hero.jpg",
+    /** WebP, because it is the only common format that keeps the alpha channel small. */
+    cutout: "/photos/founder-cutout.webp",
+  },
 } as const;
 
 export const BUILDER = {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { CATEGORY_META, URGENCY_META } from "@/lib/taxonomy";
@@ -310,11 +311,22 @@ export function PhotoFrame({
   tone = 0,
   caption,
   className,
+  src,
+  alt,
+  priority = false,
+  position = "center",
 }: {
   aspect?: "4/3" | "4/5" | "3/4" | "square" | "21/9" | "16/9";
   tone?: number;
   caption?: string;
   className?: string;
+  /** A real photograph. Without it the frame stays an honest placeholder. */
+  src?: string;
+  /** Required whenever src is set. Describes the photograph, not the layout. */
+  alt?: string;
+  priority?: boolean;
+  /** object-position, for steering the crop at narrow widths. */
+  position?: "center" | "top" | "left" | "right";
 }) {
   const aspectClass =
     aspect === "square"
@@ -330,6 +342,47 @@ export function PhotoFrame({
               : "aspect-[4/3]";
 
   const toneClass = PHOTO_TONES[tone % PHOTO_TONES.length];
+
+  const positionClass =
+    position === "top"
+      ? "object-top"
+      : position === "left"
+        ? "object-left"
+        : position === "right"
+          ? "object-right"
+          : "object-center";
+
+  // A real photograph. The frame, the radius and the border stay identical to the
+  // placeholder, so a page half-photographed does not look half-built.
+  if (src) {
+    return (
+      <div
+        className={cn(
+          "relative max-w-full overflow-hidden rounded-2xl border border-brand-line/60 bg-brand-ink",
+          aspectClass,
+          className,
+        )}
+      >
+        <Image
+          src={src}
+          alt={alt ?? ""}
+          fill
+          priority={priority}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          className={cn("object-cover", positionClass)}
+        />
+        {caption ? (
+          <>
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brand-ink/85 to-transparent"
+            />
+            <span className="absolute inset-x-4 bottom-4 text-sm font-medium text-brand-paper">{caption}</span>
+          </>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
     <div

@@ -255,6 +255,47 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* The advocate */}
+      <section id="advocate" className="section scroll-mt-28 border-t border-brand-line bg-white">
+        <div className="container">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+            <PhotoFrame
+              aspect="4/3"
+              src={FOUNDER.photo.field}
+              alt={`${FOUNDER.name} on a littered mangrove shoreline, holding a filled collection sack`}
+              position="right"
+            />
+
+            <div>
+              <SectionHeading eyebrow="The advocate" title="Somebody's name is on this" />
+
+              <p className="mt-6 text-base leading-relaxed text-brand-ink/75">
+                EARTHLINK Philippines is the advocacy of {FOUNDER.name}. A platform that asks public
+                offices to be accountable in the open cannot itself be anonymous. So it is not run
+                by a logo. There is a person attached to it, and he can be contacted.
+              </p>
+
+              <p className="mt-4 text-base leading-relaxed text-brand-ink/75">
+                That is the same standard the platform applies to everyone else on it. Every case
+                carries a number, a named responsible office and a visible clock. The person who
+                started it does not get an exemption from that.
+              </p>
+
+              <div className="mt-8 border-l-2 border-brand-signal pl-5">
+                <p className="text-lg font-medium text-brand-deep">{FOUNDER.name}</p>
+                <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-ink/55">
+                  {FOUNDER.role}
+                </p>
+              </div>
+
+              <ArrowLink href="/contact" className="mt-8">
+                Contact the team
+              </ArrowLink>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Credits */}
       <section className="on-ink section bg-brand-ink">
         <div className="container">

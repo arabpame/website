@@ -65,6 +65,7 @@ security, and a production build of 84 static pages.
 | Learn, EARTH Kids | Structure done. Lesson content is Phase 4 |
 | Missions, Connect, Score, Ambassadors | Done |
 | Legal pages | Done. Privacy written against RA 10173 |
+| Photography | Three founder photographs in. Every other slot is still an honest placeholder |
 | QA tooling | Done. 6 scripts, all zero-dependency |
 | Docs | Done. README, USER_MANUAL, this file, PROJECT_RULES, DESIGN_DIRECTION, STACK_DECISION |
 | Backend | **Not started. Phase 2.** |

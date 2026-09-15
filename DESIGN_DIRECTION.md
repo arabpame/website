@@ -129,11 +129,38 @@ site should feel like a readout settling, not like a presentation.
 
 ### Imagery
 
-The client has not supplied photography, and the valuation lists twelve photographs as a
+Most photography is still outstanding, and the valuation lists twelve photographs as a
 precondition for a build day. Rather than ship stock images pretending to be Philippine
-communities, every photo slot renders a `PhotoFrame` placeholder: a tone-matched gradient
-with grain and a visible "Photograph to be supplied" tag. An empty state that reads as
-deliberate. This is the ECG pattern and it is honest about what is missing.
+communities, an unfilled photo slot renders a `PhotoFrame` placeholder: a tone-matched
+gradient with grain and a visible "Photograph to be supplied" tag. An empty state that reads
+as deliberate. This is the ECG pattern and it is honest about what is missing.
+
+`PhotoFrame` takes an optional `src`. With one it renders the real photograph in the same
+frame, radius and border, so a half-photographed page never looks half-built. Without one it
+stays the placeholder. Filling a slot is therefore a one-line change and nothing else moves.
+
+**Three founder photographs are in, and they are the only photography on the site.** They are
+commissioned portraiture, generated to brief, and they are treated accordingly:
+
+| File | Where | Why there |
+|---|---|---|
+| `founder-field.jpg` | About, "The advocate" | Documentary register. He is working, on a littered shoreline, looking off camera. It argues the platform's case rather than introducing a personality. |
+| `founder-cutout.webp` | Home, "The advocate" band | Transparent cut-out composited over the brand gradient, with **live text**, never type baked into pixels. |
+| `founder-hero.jpg` | Get involved, key art | Landscape key art under the page header. |
+
+Two rules govern them, and both are load-bearing:
+
+1. **They never touch the case register, the map or a mission.** They are not evidence. No
+   case, location or date is attached to them, and no caption implies one. The sample-data
+   rule in `PROJECT_RULES.md` covers photographs as well as figures.
+2. **No type is ever baked into an image.** Baked text cannot be selected, read by a screen
+   reader, reflowed at 375px or translated, and Filipino translation is the largest single
+   improvement still available to this site. Every headline over a photograph is real text
+   in the DOM.
+
+Photographs are optimised by `npm run photos:optimize`, which converts anything dropped into
+`public/photos` to a derivative under the 300 KB QA budget, keeps transparency as WebP, and
+moves the untouched original into the gitignored `photos-master/`.
 
 ### The signature element: the case chip
 

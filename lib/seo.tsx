@@ -81,6 +81,8 @@ export function organisationJsonLd() {
     founder: {
       "@type": "Person",
       name: FOUNDER.name,
+      jobTitle: FOUNDER.role,
+      image: `${SITE.url}${FOUNDER.photo.hero}`,
     },
     areaServed: {
       "@type": "Country",

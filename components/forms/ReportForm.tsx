@@ -1,29 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
+import { useRef, useState, useTransition } from "react";
+import { fileReport, type ReportResult } from "@/app/report/actions";
+import { CategoryIcon } from "@/components/ui/Primitives";
 import { CATEGORY_META, CATEGORY_ORDER, URGENCY_META } from "@/lib/taxonomy";
 import { URGENCY_LEVELS, type CaseCategory, type Urgency } from "@/lib/types";
-import { CategoryIcon } from "@/components/ui/Primitives";
 import { cn } from "@/lib/utils";
 
 /**
  * The report intake form.
  *
- * PHASE 1 SCOPE. This is the complete designed flow, fully interactive, with real
- * validation and real state. It does NOT submit anywhere, because there is no
- * backend yet: the submit step shows exactly what the confirmation will look like
- * and says plainly that nothing was sent.
+ * Four steps, in the order a person actually notices a problem: what it is,
+ * where it is, what it looks like, and who is reporting. Every step validates
+ * before the next one opens, with errors written as text and a suggested fix.
  *
- * That honesty is deliberate. A form that silently discards a genuine
- * environmental report would be worse than no form, and someone will try this on
- * the live design build.
+ * On the last step the form posts to the fileReport Server Action, which
+ * validates everything again, saves the report, stores the photographs, emails
+ * the founder and refreshes the map. The reporter gets their case number and a
+ * link to the public case page.
  *
- * Phase 2 replaces handleSubmit with a Server Action that validates with zod,
- * rate limits by IP, checks a Turnstile token, writes the case, then sends mail.
- * Nothing else in this component needs to change.
- *
- * Four steps, in the order a person actually notices a problem: what it is, where
- * it is, what it looks like, and who is reporting.
+ * Photographs are resized in the browser before upload. Phones produce 4 to 12
+ * MB images, the function that receives the form is capped at 4 MB, and a
+ * 1600-pixel JPEG is more than enough evidence.
  */
 
 const STEPS = [
@@ -32,6 +31,23 @@ const STEPS = [
   { key: "evidence", label: "Evidence" },
   { key: "you", label: "About you" },
 ] as const;
+
+const MAX_FILES = 10;
+const MAX_EDGE = 1600;
+const JPEG_QUALITY = 0.82;
+
+interface Photo {
+  id: string;
+  file: File;
+  previewUrl: string;
+  originalBytes: number;
+}
+
+interface DeviceLocation {
+  lat: number;
+  lng: number;
+  accuracy: number;
+}
 
 interface FormState {
   category: CaseCategory | null;
@@ -44,7 +60,6 @@ interface FormState {
   province: string;
   landmark: string;
   useLocation: boolean;
-  files: string[];
   anonymous: boolean;
   name: string;
   contact: string;
@@ -62,18 +77,41 @@ const EMPTY: FormState = {
   province: "",
   landmark: "",
   useLocation: false,
-  files: [],
   anonymous: false,
   name: "",
   contact: "",
   consent: false,
 };
 
+/** Which step each server-side field error belongs to, so the form can jump there. */
+const FIELD_STEP: Record<string, number> = {
+  category: 0,
+  title: 0,
+  description: 0,
+  observedOn: 0,
+  urgency: 0,
+  barangay: 1,
+  municipality: 1,
+  province: 1,
+  files: 2,
+  contact: 3,
+  consent: 3,
+};
+
 export function ReportForm() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<FormState>(EMPTY);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [device, setDevice] = useState<DeviceLocation | null>(null);
+  const [locating, setLocating] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [result, setResult] = useState<ReportResult | null>(null);
+  const [preparing, setPreparing] = useState(false);
+  const [pending, startTransition] = useTransition();
+  // Honeypot. A person never sees this field.
+  const [website, setWebsite] = useState("");
+  const fileInput = useRef<HTMLInputElement>(null);
 
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -102,8 +140,10 @@ export function ReportForm() {
     }
 
     if (index === 1) {
+      if (form.useLocation && !device) {
+        next.municipality = "Your location has not been detected yet. Wait a moment, or switch detection off and type the place.";
+      }
       if (!form.useLocation) {
-        if (!form.barangay.trim()) next.barangay = "Enter the barangay, or switch on location detection above.";
         if (!form.municipality.trim())
           next.municipality = "Enter the city or municipality, or switch on location detection above.";
         if (!form.province.trim()) next.province = "Enter the province, or switch on location detection above.";
@@ -128,12 +168,151 @@ export function ReportForm() {
       setStep(step + 1);
       return;
     }
-    setSubmitted(true);
+    submit();
   }
 
-  if (submitted) {
-    return <SubmittedPanel form={form} onReset={() => { setForm(EMPTY); setStep(0); setSubmitted(false); }} />;
+  function submit() {
+    setMessage(null);
+    const data = new FormData();
+    data.set("website", website);
+    data.set("category", form.category ?? "");
+    data.set("title", form.title);
+    data.set("description", form.description);
+    data.set("observedOn", form.observedOn);
+    data.set("urgency", form.urgency);
+    data.set("barangay", form.barangay);
+    data.set("landmark", form.landmark);
+    if (form.useLocation && device) {
+      data.set("lat", String(device.lat));
+      data.set("lng", String(device.lng));
+    } else {
+      data.set("municipality", form.municipality);
+      data.set("province", form.province);
+    }
+    if (form.anonymous) data.set("anonymous", "on");
+    data.set("name", form.name);
+    data.set("contact", form.contact);
+    if (form.consent) data.set("consent", "on");
+    for (const photo of photos) data.append("files", photo.file, photo.file.name);
+
+    startTransition(async () => {
+      try {
+        const outcome = await fileReport(data);
+        if (outcome.ok) {
+          setResult(outcome);
+          return;
+        }
+        if (outcome.errors && Object.keys(outcome.errors).length > 0) {
+          setErrors(outcome.errors);
+          const first = Object.keys(outcome.errors)[0] ?? "";
+          setStep(FIELD_STEP[first] ?? step);
+          return;
+        }
+        setMessage(outcome.message ?? "Something went wrong and nothing was filed. Please try again.");
+      } catch {
+        setMessage(
+          "The report could not be sent. Check your connection and try again. Nothing was filed.",
+        );
+      }
+    });
   }
+
+  // --- Location -------------------------------------------------------------
+
+  function toggleLocation(on: boolean) {
+    set("useLocation", on);
+    if (!on) {
+      setDevice(null);
+      return;
+    }
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      set("useLocation", false);
+      setErrors((e) => ({ ...e, municipality: "This browser cannot share its location. Type the place instead." }));
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setDevice({ lat: pos.coords.latitude, lng: pos.coords.longitude, accuracy: pos.coords.accuracy });
+        setLocating(false);
+        setErrors((e) => {
+          const next = { ...e };
+          delete next.municipality;
+          delete next.province;
+          return next;
+        });
+      },
+      () => {
+        setLocating(false);
+        set("useLocation", false);
+        setErrors((e) => ({
+          ...e,
+          municipality: "Location permission was not given, so type the place instead.",
+        }));
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
+    );
+  }
+
+  // --- Photographs ----------------------------------------------------------
+
+  async function addFiles(list: FileList | null) {
+    if (!list || list.length === 0) return;
+    setPreparing(true);
+    setErrors((e) => {
+      const next = { ...e };
+      delete next.files;
+      return next;
+    });
+    const room = MAX_FILES - photos.length;
+    const chosen = Array.from(list).slice(0, room);
+    const added: Photo[] = [];
+    for (const original of chosen) {
+      if (!original.type.startsWith("image/")) continue;
+      try {
+        const file = await shrinkImage(original);
+        added.push({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+          file,
+          previewUrl: URL.createObjectURL(file),
+          originalBytes: original.size,
+        });
+      } catch {
+        setErrors((e) => ({ ...e, files: `${original.name} could not be read as a photograph and was skipped.` }));
+      }
+    }
+    setPhotos((p) => [...p, ...added]);
+    if (list.length > room) {
+      setErrors((e) => ({ ...e, files: `Up to ${MAX_FILES} photographs can be attached. The extra ones were left out.` }));
+    }
+    setPreparing(false);
+    if (fileInput.current) fileInput.current.value = "";
+  }
+
+  function removePhoto(id: string) {
+    setPhotos((p) => {
+      const gone = p.find((x) => x.id === id);
+      if (gone) URL.revokeObjectURL(gone.previewUrl);
+      return p.filter((x) => x.id !== id);
+    });
+  }
+
+  function reset() {
+    for (const photo of photos) URL.revokeObjectURL(photo.previewUrl);
+    setPhotos([]);
+    setForm(EMPTY);
+    setDevice(null);
+    setErrors({});
+    setMessage(null);
+    setResult(null);
+    setStep(0);
+  }
+
+  if (result) {
+    return <SubmittedPanel result={result} title={form.title} onReset={reset} />;
+  }
+
+  const busy = pending || preparing;
 
   return (
     <div className="rounded-2xl border border-brand-line bg-brand-surface shadow-soft">
@@ -218,6 +397,7 @@ export function ReportForm() {
                 type="text"
                 value={form.title}
                 onChange={(e) => set("title", e.target.value)}
+                maxLength={120}
                 placeholder="Waste dumped along the creek easement"
                 className={inputClass(!!errors.title)}
               />
@@ -234,6 +414,7 @@ export function ReportForm() {
                 rows={5}
                 value={form.description}
                 onChange={(e) => set("description", e.target.value)}
+                maxLength={4000}
                 placeholder="Sacks of household waste have been building up along the creek for about three weeks. The channel is narrower than it was and the rains start next month."
                 className={inputClass(!!errors.description)}
               />
@@ -248,6 +429,7 @@ export function ReportForm() {
                   id="observedOn"
                   type="date"
                   value={form.observedOn}
+                  max={new Date().toISOString().slice(0, 10)}
                   onChange={(e) => set("observedOn", e.target.value)}
                   className={inputClass(!!errors.observedOn)}
                 />
@@ -297,7 +479,7 @@ export function ReportForm() {
                 <input
                   type="checkbox"
                   checked={form.useLocation}
-                  onChange={(e) => set("useLocation", e.target.checked)}
+                  onChange={(e) => toggleLocation(e.target.checked)}
                   className="mt-0.5 h-4 w-4 shrink-0 accent-[#0E6B55]"
                 />
                 <span>
@@ -305,20 +487,29 @@ export function ReportForm() {
                     Use my current location
                   </span>
                   <span className="mt-0.5 block text-xs leading-relaxed text-brand-ink/65">
-                    Detects your coordinates and fills in the barangay and municipality. Only do this if
-                    you are at the site. In the finished platform your browser asks permission first.
+                    Your browser will ask permission, then the pin is placed where you are standing and
+                    the city or municipality is filled in from it. Only do this if you are at the site.
                   </span>
                 </span>
               </label>
 
               {form.useLocation ? (
-                <div className="mt-4 rounded-lg border border-brand-primary/25 bg-white p-3">
-                  <p className="font-data text-[0.6875rem] text-brand-primary">
-                    14.4590 N, 120.9366 E
-                  </p>
-                  <p className="mt-1 text-xs text-brand-ink/60">
-                    Barangay San Isidro, Bacoor, Cavite. Sample coordinates for the demonstration.
-                  </p>
+                <div className="mt-4 rounded-lg border border-brand-primary/25 bg-white p-3" aria-live="polite">
+                  {locating ? (
+                    <p className="text-xs text-brand-ink/60">Detecting your location...</p>
+                  ) : device ? (
+                    <>
+                      <p className="font-data text-[0.6875rem] text-brand-primary">
+                        {device.lat.toFixed(4)} N, {device.lng.toFixed(4)} E
+                      </p>
+                      <p className="mt-1 text-xs text-brand-ink/60">
+                        Accurate to about {Math.round(device.accuracy)} metres. The city or municipality
+                        is worked out from this point when you file.
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-xs text-brand-ink/60">Waiting for permission...</p>
+                  )}
                 </div>
               ) : null}
             </div>
@@ -329,13 +520,18 @@ export function ReportForm() {
             </p>
 
             <div className="grid gap-6 sm:grid-cols-2">
-              <Field label="Barangay" error={errors.barangay} id="barangay">
+              <Field
+                label="Barangay"
+                hint={form.useLocation ? "Optional when your location is detected." : undefined}
+                error={errors.barangay}
+                id="barangay"
+              >
                 <input
                   id="barangay"
                   type="text"
                   value={form.barangay}
                   onChange={(e) => set("barangay", e.target.value)}
-                  disabled={form.useLocation}
+                  maxLength={80}
                   className={inputClass(!!errors.barangay)}
                 />
               </Field>
@@ -346,6 +542,8 @@ export function ReportForm() {
                   value={form.municipality}
                   onChange={(e) => set("municipality", e.target.value)}
                   disabled={form.useLocation}
+                  maxLength={80}
+                  placeholder="Bacoor"
                   className={inputClass(!!errors.municipality)}
                 />
               </Field>
@@ -358,6 +556,8 @@ export function ReportForm() {
                 value={form.province}
                 onChange={(e) => set("province", e.target.value)}
                 disabled={form.useLocation}
+                maxLength={80}
+                placeholder="Cavite. For Metro Manila cities, write Metro Manila."
                 className={inputClass(!!errors.province)}
               />
             </Field>
@@ -372,6 +572,7 @@ export function ReportForm() {
                 type="text"
                 value={form.landmark}
                 onChange={(e) => set("landmark", e.target.value)}
+                maxLength={200}
                 placeholder="Behind the covered court, along the creek"
                 className={inputClass(false)}
               />
@@ -383,11 +584,30 @@ export function ReportForm() {
         {step === 2 ? (
           <div className="space-y-6">
             <Field
-              label="Photographs or video"
-              hint="Up to 10 files. Photographs from different dates at the same spot are the most useful evidence there is."
+              label="Photographs"
+              hint={`Up to ${MAX_FILES}. They are resized on your phone before sending, so they upload quickly even on mobile data.`}
+              error={errors.files}
               id="files"
             >
-              <div className="rounded-xl border-2 border-dashed border-brand-line bg-brand-paper p-8 text-center">
+              <input
+                ref={fileInput}
+                id="files"
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => addFiles(e.target.files)}
+                className="sr-only"
+                disabled={photos.length >= MAX_FILES || preparing}
+              />
+              <label
+                htmlFor="files"
+                className={cn(
+                  "block cursor-pointer rounded-xl border-2 border-dashed bg-brand-paper p-8 text-center transition-colors",
+                  photos.length >= MAX_FILES
+                    ? "cursor-not-allowed border-brand-line opacity-60"
+                    : "border-brand-line hover:border-brand-primary/50",
+                )}
+              >
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
@@ -400,41 +620,40 @@ export function ReportForm() {
                 >
                   <path d="M12 16V4m0 0L8 8m4-4 4 4M3 15v3a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-3" />
                 </svg>
-                <p className="mt-3 text-sm font-semibold text-brand-deep">
-                  Upload is part of Phase 2
-                </p>
-                <p className="mx-auto mt-1.5 max-w-sm text-xs leading-relaxed text-brand-ink/60">
-                  In the finished platform you add photographs and video here, they are compressed on
-                  your device before sending, and they are stored against the case permanently. This
-                  design build does not store files.
-                </p>
-                <button
-                  type="button"
-                  onClick={() =>
-                    set(
-                      "files",
-                      form.files.length >= 3
-                        ? []
-                        : [...form.files, `sample-photo-${form.files.length + 1}.jpg`],
-                    )
-                  }
-                  className="btn-outline mt-5 px-4 py-2 text-xs"
-                >
-                  {form.files.length >= 3 ? "Clear the sample files" : "Add a sample file"}
-                </button>
-              </div>
+                <span className="mt-3 block text-sm font-semibold text-brand-deep">
+                  {preparing ? "Preparing photographs..." : "Tap to add photographs"}
+                </span>
+                <span className="mx-auto mt-1.5 block max-w-sm text-xs leading-relaxed text-brand-ink/60">
+                  From your camera or your gallery. JPEG, PNG or WebP.
+                  {photos.length > 0 ? ` ${photos.length} of ${MAX_FILES} attached.` : ""}
+                </span>
+              </label>
 
-              {form.files.length > 0 ? (
-                <ul className="mt-3 space-y-2">
-                  {form.files.map((file) => (
+              {photos.length > 0 ? (
+                <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {photos.map((photo, i) => (
                     <li
-                      key={file}
-                      className="flex items-center justify-between gap-3 rounded-lg border border-brand-line bg-white px-3 py-2"
+                      key={photo.id}
+                      className="overflow-hidden rounded-lg border border-brand-line bg-white"
                     >
-                      <span className="truncate font-data text-xs text-brand-ink/70">{file}</span>
-                      <span className="shrink-0 font-data text-[0.6875rem] text-status-resolved-text">
-                        attached
-                      </span>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={photo.previewUrl}
+                        alt={`Photograph ${i + 1} to attach`}
+                        className="aspect-[4/3] w-full object-cover"
+                      />
+                      <div className="flex items-center justify-between gap-2 px-2.5 py-2">
+                        <span className="font-data text-[0.6875rem] text-brand-ink/60">
+                          {formatBytes(photo.file.size)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(photo.id)}
+                          className="text-[0.6875rem] font-semibold text-status-reported-text underline-offset-2 hover:underline"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -499,6 +718,7 @@ export function ReportForm() {
                     value={form.name}
                     onChange={(e) => set("name", e.target.value)}
                     autoComplete="name"
+                    maxLength={120}
                     className={inputClass(false)}
                   />
                 </Field>
@@ -514,6 +734,7 @@ export function ReportForm() {
                     value={form.contact}
                     onChange={(e) => set("contact", e.target.value)}
                     autoComplete="email"
+                    maxLength={160}
                     className={inputClass(!!errors.contact)}
                   />
                 </Field>
@@ -538,6 +759,23 @@ export function ReportForm() {
               </label>
             </Field>
 
+            {/*
+              Honeypot. Hidden from people, visible to naive bots. Never display: none
+              alone, which sophisticated bots check for, and always aria-hidden and
+              out of the tab order.
+            */}
+            <div aria-hidden="true" className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden">
+              <label htmlFor="report-website">Website</label>
+              <input
+                id="report-website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </div>
+
             <div className="rounded-xl border border-brand-line bg-brand-paper p-5">
               <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-primary">
                 Check before you file
@@ -550,15 +788,27 @@ export function ReportForm() {
                 <Summary
                   label="Location"
                   value={
-                    form.useLocation
-                      ? "Detected from your device"
+                    form.useLocation && device
+                      ? `Detected from your device${form.barangay ? `, ${form.barangay}` : ""}`
                       : [form.barangay, form.municipality, form.province].filter(Boolean).join(", ") || "Not set"
                   }
                 />
-                <Summary label="Evidence" value={form.files.length ? `${form.files.length} files` : "None attached"} />
+                <Summary
+                  label="Evidence"
+                  value={photos.length ? `${photos.length} photograph${photos.length === 1 ? "" : "s"}` : "None attached"}
+                />
                 <Summary label="Reporter" value={form.anonymous ? "Anonymous" : form.name || "Not given"} />
               </dl>
             </div>
+
+            {message ? (
+              <div
+                role="alert"
+                className="rounded-xl border border-status-reported/40 bg-status-reported/[0.07] p-4 text-sm leading-relaxed text-status-reported-text"
+              >
+                {message}
+              </div>
+            ) : null}
           </div>
         ) : null}
 
@@ -567,18 +817,17 @@ export function ReportForm() {
           <button
             type="button"
             onClick={() => setStep(Math.max(0, step - 1))}
-            disabled={step === 0}
-            className="btn-outline px-5 py-2.5 text-sm disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={step === 0 || busy}
+            className="btn-outline disabled:cursor-not-allowed disabled:opacity-40"
           >
             Back
           </button>
-
           <div className="flex items-center gap-4">
-            <span className="font-data text-xs text-brand-ink/45">
+            <span className="font-data text-[0.6875rem] text-brand-ink/50">
               Step {step + 1} of {STEPS.length}
             </span>
-            <button type="button" onClick={goNext} className="btn-primary px-6 py-2.5 text-sm">
-              {step === STEPS.length - 1 ? "File this report" : "Continue"}
+            <button type="button" onClick={goNext} disabled={busy} className="btn-primary disabled:opacity-60">
+              {step === STEPS.length - 1 ? (pending ? "Filing..." : "File this report") : "Continue"}
             </button>
           </div>
         </div>
@@ -587,7 +836,9 @@ export function ReportForm() {
         <div aria-live="polite" className="sr-only">
           {Object.keys(errors).length > 0
             ? `${Object.keys(errors).length} fields need attention before you can continue.`
-            : ""}
+            : pending
+              ? "Filing your report."
+              : ""}
         </div>
       </div>
     </div>
@@ -595,6 +846,39 @@ export function ReportForm() {
 }
 
 // ---------------------------------------------------------------------------
+
+/**
+ * Resize a photograph on the device. Long edge capped, re-encoded as JPEG. A
+ * file that is already small and already JPEG or WebP is passed through.
+ */
+async function shrinkImage(original: File): Promise<File> {
+  const passThrough = original.size < 600_000 && /^image\/(jpeg|webp)$/.test(original.type);
+  if (passThrough) return original;
+
+  const bitmap = await createImageBitmap(original);
+  const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("no canvas");
+  ctx.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+
+  const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/jpeg", JPEG_QUALITY));
+  if (!blob) throw new Error("encode failed");
+  const name = original.name.replace(/\.[^.]+$/, "") || "photo";
+  return new File([blob], `${name}.jpg`, { type: "image/jpeg" });
+}
+
+function formatBytes(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 function inputClass(hasError: boolean) {
   return cn(
@@ -649,13 +933,20 @@ function Summary({ label, value }: { label: string; value: string }) {
 }
 
 /**
- * The confirmation.
- *
- * It shows the case number the reporter would receive and exactly what happens
- * next, and it says without hedging that nothing was actually filed. Anyone
- * testing this design build with a genuine concern deserves to know that.
+ * The confirmation. The case number is real, assigned by the database, and the
+ * link goes to the public case page that now exists for it.
  */
-function SubmittedPanel({ form, onReset }: { form: FormState; onReset: () => void }) {
+function SubmittedPanel({
+  result,
+  title,
+  onReset,
+}: {
+  result: ReportResult;
+  title: string;
+  onReset: () => void;
+}) {
+  const href = result.slug ? `/cases/${result.slug}` : "/cases";
+
   return (
     <div className="rounded-2xl border border-brand-line bg-brand-surface p-6 shadow-soft sm:p-8">
       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-signal">
@@ -664,39 +955,34 @@ function SubmittedPanel({ form, onReset }: { form: FormState; onReset: () => voi
         </svg>
       </div>
 
-      <h2 className="mt-5 text-display-md text-brand-deep">This is what you would see</h2>
+      <h2 className="mt-5 text-display-md text-brand-deep">Your report is filed</h2>
 
-      <div className="mt-6 rounded-xl border border-brand-primary/25 bg-brand-primary/[0.05] p-5">
-        <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-primary">
-          Your EARTH case number
-        </p>
-        <p className="mt-2 font-data text-2xl font-bold tracking-tight text-brand-deep">
-          EARTH-2026-0681
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-brand-ink/70">
-          {form.title || "Your report"}. Permanent, never reused, and the reference for everything that
-          happens to this case from here.
-        </p>
-      </div>
-
-      <div className="mt-6 rounded-xl border border-status-referred/30 bg-status-referred/[0.07] p-5">
-        <p className="text-sm font-bold text-status-referred-text">Nothing was actually filed</p>
-        <p className="mt-2 text-sm leading-relaxed text-brand-ink/75">
-          This is the Phase 1 design build. There is no database behind this form yet, so your report
-          was not saved and not sent to anyone. If you have a real environmental concern, please contact
-          your barangay or your city environment office directly.
-        </p>
-      </div>
+      {result.caseNumber ? (
+        <div className="mt-6 rounded-xl border border-brand-primary/25 bg-brand-primary/[0.05] p-5">
+          <p className="font-data text-[0.6875rem] uppercase tracking-eyebrow text-brand-primary">
+            Your EARTH case number
+          </p>
+          <p className="mt-2 font-data text-2xl font-bold tracking-tight text-brand-deep">
+            {result.caseNumber}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-brand-ink/70">
+            {title || "Your report"}. Permanent, never reused, and the reference for everything that
+            happens to this case from here. Write it down or take a screenshot.
+          </p>
+        </div>
+      ) : (
+        <p className="mt-6 text-sm leading-relaxed text-brand-ink/70">Thank you. Your report has been received.</p>
+      )}
 
       <div className="mt-8">
-        <p className="text-sm font-bold text-brand-deep">In the finished platform, next would be:</p>
+        <p className="text-sm font-bold text-brand-deep">What happens next</p>
         <ol className="mt-4 space-y-3">
           {[
-            "A confirmation email or text with your case number, within a minute.",
-            "Verification by the EARTHLINK team, usually within a week.",
-            "Other reports of the same problem merged into your case.",
-            "Referral to the office responsible, with your evidence attached.",
-            "A public case page you can check at any time.",
+            "Your case is on the EARTH Map and in the case register now, marked Reported.",
+            "The EARTHLINK team has been notified and reviews the report, usually within a week.",
+            "Other reports of the same problem are merged into your case.",
+            "Once verified it is referred to the office responsible, with your evidence attached.",
+            "Every step is recorded on the public case page, which you can check at any time.",
           ].map((line, i) => (
             <li key={line} className="flex gap-3">
               <span className="font-data text-[0.6875rem] text-brand-ink/40">
@@ -708,9 +994,17 @@ function SubmittedPanel({ form, onReset }: { form: FormState; onReset: () => voi
         </ol>
       </div>
 
-      <button type="button" onClick={onReset} className="btn-outline mt-8">
-        Try the form again
-      </button>
+      <div className="mt-8 flex flex-wrap gap-3">
+        <Link href={href} className="btn-primary">
+          Open the case page
+        </Link>
+        <Link href="/map" className="btn-outline">
+          See it on the map
+        </Link>
+        <button type="button" onClick={onReset} className="btn-outline">
+          File another report
+        </button>
+      </div>
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { EarthMap } from "@/components/map/EarthMap";
 import { CaseChip } from "@/components/ui/CaseChip";
 import { ArrowLink, ButtonLink, Eyebrow, PhotoFrame } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { MISSION_TYPE_LABELS } from "@/lib/taxonomy";
 import { getCaseByNumber, getMission, getMissionSlugs } from "@/lib/store";
 import { JsonLd, MAX_DESCRIPTION, MAX_PAGE_TITLE, breadcrumbJsonLd, pageMeta, trim } from "@/lib/seo";
@@ -61,14 +60,23 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
             <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">{mission.province}</dt>
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
-            <dd className="font-data text-sm font-bold text-brand-signal">
-              {mission.registered} / {mission.capacity}
-            </dd>
-            <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Places filled</dt>
+            {mission.capacity === 0 ? (
+              <>
+                <dd className="text-sm font-bold leading-snug text-brand-signal">{mission.organiser}</dd>
+                <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Organiser</dt>
+              </>
+            ) : (
+              <>
+                <dd className="font-data text-sm font-bold text-brand-signal">
+                  {mission.registered} / {mission.capacity}
+                </dd>
+                <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Places filled</dt>
+              </>
+            )}
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[0.04] p-4">
             <dd className="text-sm font-bold text-brand-signal">
-              {isCompleted ? "Completed" : remaining > 0 ? "Open" : "Waitlist"}
+              {isCompleted ? "Completed" : mission.capacity === 0 || remaining > 0 ? "Open" : "Waitlist"}
             </dd>
             <dt className="mt-1 text-[0.6875rem] text-brand-paper/60">Status</dt>
           </div>
@@ -165,6 +173,30 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                         See open missions
                       </ButtonLink>
                     </>
+                  ) : mission.capacity === 0 ? (
+                    <>
+                      <p className="text-base font-bold text-brand-deep">Open to volunteers</p>
+                      <p className="mt-2 text-sm leading-relaxed text-brand-ink/70">
+                        Places are managed by the organiser, {mission.organiser}.
+                        {mission.registration && !/^https?:\/\//.test(mission.registration)
+                          ? ` ${mission.registration}`
+                          : ""}
+                      </p>
+                      {mission.registration && /^https?:\/\//.test(mission.registration) ? (
+                        <a
+                          href={mission.registration}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="btn-primary mt-6 w-full"
+                        >
+                          Join through the organiser
+                        </a>
+                      ) : (
+                        <ButtonLink href="/get-involved" className="mt-6 w-full">
+                          Volunteer with EARTHLINK
+                        </ButtonLink>
+                      )}
+                    </>
                   ) : (
                     <>
                       <div className="flex items-baseline justify-between gap-3">
@@ -185,11 +217,6 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                       <ButtonLink href="/get-involved" className="mt-6 w-full">
                         {remaining > 0 ? "Register as a volunteer" : "Join the waitlist"}
                       </ButtonLink>
-
-                      <p className="mt-4 text-xs leading-relaxed text-brand-ink/55">
-                        Volunteer registration is Phase 3 of the build. For now this links to the
-                        general volunteer page.
-                      </p>
                     </>
                   )}
                 </div>
@@ -225,7 +252,7 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                 <div className="on-ink overflow-hidden rounded-2xl bg-brand-ink p-5">
                   <Eyebrow onInk>Where</Eyebrow>
                   <p className="mt-3 text-sm font-semibold text-brand-paper">
-                    {mission.barangay}, {mission.municipality}
+                    {[mission.barangay, mission.municipality].filter(Boolean).join(", ")}
                   </p>
                   <p className="text-xs text-brand-paper/60">
                     {mission.province} · Region {mission.region}
@@ -238,10 +265,28 @@ export default async function MissionPage({ params }: { params: Promise<{ slug: 
                   </ArrowLink>
                 </div>
 
-                <DemoNote>
-                  This is a sample mission created to demonstrate the design. No real volunteers are
-                  registered and no real organisation has scheduled it.
-                </DemoNote>
+                {mission.sources && mission.sources.length > 0 ? (
+                  <div className="rounded-2xl border border-brand-line bg-brand-paper p-5">
+                    <Eyebrow>Announced by</Eyebrow>
+                    <ul className="mt-3 space-y-2">
+                      {mission.sources.map((source) => (
+                        <li key={source.url}>
+                          <a
+                            href={source.url}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="text-sm font-semibold leading-snug text-brand-deep underline decoration-brand-primary/40 underline-offset-2 hover:text-brand-primary"
+                          >
+                            {source.title}
+                          </a>
+                          <p className="mt-0.5 font-data text-[0.6875rem] text-brand-ink/55">
+                            {source.outlet} · {formatDate(source.date)}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
               </div>
             </aside>
           </div>

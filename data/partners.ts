@@ -1,336 +1,313 @@
-import type { Partner, ScoreEntry, ImpactMetric } from "@/lib/types";
+import type { Partner, ScoreEntry, ImpactMetric, EarthCase, Mission } from "@/lib/types";
 import { CASES } from "@/data/cases";
 import { MISSIONS } from "@/data/missions";
 
 /**
- * SAMPLE DATA.
+ * Partners, scores and the transparency counters.
  *
- * The agency TYPES here are real (a CENRO, a PENRO, a barangay environment
- * committee and so on all exist and do roughly this work), but every organisation
- * below is written for the demonstration. Response figures in particular are
- * invented, and it would be unfair as well as inaccurate to present them as a real
- * office's record.
+ * Nothing on this page is typed in as a number. The partner directory is a
+ * curated list of the real offices that appear in the documented cases, and
+ * every count beside a partner, every score and every dashboard counter is
+ * DERIVED from data/cases.ts and data/missions.ts at build time. When a case
+ * changes, these change with it, so the dashboard can never quietly disagree
+ * with the pages it summarises.
  */
 
-export const PARTNERS: Partner[] = [
+// ---------------------------------------------------------------------------
+// Partners: the offices the documented cases were actually referred to
+// ---------------------------------------------------------------------------
+
+interface PartnerSeed extends Omit<Partner, "casesReceived" | "casesAcknowledged" | "casesResolved"> {
+  /** Matches the referredTo field and timeline actors of a case. */
+  match: RegExp;
+}
+
+const PARTNER_SEEDS: PartnerSeed[] = [
   {
-    slug: "denr-region-iv-a",
-    name: "DENR Region IV-A",
+    slug: "denr-emb",
+    name: "DENR Environmental Management Bureau",
     type: "national-agency",
-    coverage: "CALABARZON, all five provinces",
-    region: "IV-A",
-    handles: ["forest", "water", "biodiversity", "land", "air"],
-    casesReceived: 34,
-    casesAcknowledged: 31,
-    casesResolved: 19,
+    coverage: "Pollution, waste facilities, water quality and environmental compliance, through its regional offices",
+    region: "PH",
+    handles: ["waste", "water", "air", "hazard"],
+    match: /\bEMB\b|Environmental Management Bureau|Pollution Adjudication/i,
   },
   {
-    slug: "denr-barmm-penro",
-    name: "DENR BARMM, Provincial Environment and Natural Resources Office",
+    slug: "denr-mgb",
+    name: "DENR Mines and Geosciences Bureau",
     type: "national-agency",
-    coverage: "Bangsamoro provinces",
-    region: "BARMM",
-    handles: ["biodiversity", "forest", "water"],
-    casesReceived: 12,
-    casesAcknowledged: 12,
-    casesResolved: 7,
+    coverage: "Mining, quarrying, landslides, sinkholes and ground hazards, through its regional offices",
+    region: "PH",
+    handles: ["land", "hazard"],
+    match: /\bMGB\b|Mines and Geosciences/i,
   },
   {
-    slug: "bfar-region-iv-a",
-    name: "Bureau of Fisheries and Aquatic Resources, Region IV-A",
+    slug: "denr-bmb",
+    name: "DENR Biodiversity Management Bureau",
     type: "national-agency",
-    coverage: "Laguna Lake and the CALABARZON coast",
-    region: "IV-A",
+    coverage: "Wildlife, protected areas and threatened species nationwide",
+    region: "PH",
+    handles: ["biodiversity", "forest"],
+    match: /\bBMB\b|Biodiversity Management|Wildlife Resources|Protected Area Management|PAMO/i,
+  },
+  {
+    slug: "denr-field-offices",
+    name: "DENR regional, PENRO and CENRO offices",
+    type: "national-agency",
+    coverage: "Forestry, timber, protected areas and field enforcement in every region",
+    region: "PH",
+    handles: ["forest", "biodiversity", "land", "waste"],
+    match: /\bDENR\b|\bCENRO\b|\bPENRO\b/i,
+  },
+  {
+    slug: "bfar",
+    name: "Bureau of Fisheries and Aquatic Resources",
+    type: "national-agency",
+    coverage: "Fish kills, red tide, illegal fishing and marine strandings, through its regional offices",
+    region: "PH",
     handles: ["water", "biodiversity"],
-    casesReceived: 9,
-    casesAcknowledged: 9,
-    casesResolved: 6,
+    match: /\bBFAR\b|Fisheries and Aquatic|Fishery Office|Bantay Dagat/i,
   },
   {
-    slug: "laguna-lake-development-authority",
+    slug: "philippine-coast-guard",
+    name: "Philippine Coast Guard",
+    type: "national-agency",
+    coverage: "Oil spills, groundings, maritime enforcement and marine wildlife response",
+    region: "PH",
+    handles: ["water", "biodiversity", "forest"],
+    match: /Coast Guard|\bPCG\b/i,
+  },
+  {
+    slug: "llda",
     name: "Laguna Lake Development Authority",
     type: "national-agency",
-    coverage: "The Laguna de Bay basin",
+    coverage: "Laguna de Bay and its tributaries across Rizal, Laguna and Metro Manila",
     region: "IV-A",
-    handles: ["water", "hazard"],
-    casesReceived: 15,
-    casesAcknowledged: 13,
-    casesResolved: 8,
+    handles: ["water"],
+    match: /\bLLDA\b|Laguna Lake Development/i,
   },
   {
-    slug: "philippine-coast-guard-surigao",
-    name: "Philippine Coast Guard, Surigao Station",
+    slug: "mmda",
+    name: "Metropolitan Manila Development Authority",
     type: "national-agency",
-    coverage: "Surigao del Norte waters",
-    region: "XIII",
-    handles: ["hazard", "water"],
-    casesReceived: 6,
-    casesAcknowledged: 6,
-    casesResolved: 4,
-  },
-  {
-    slug: "bacoor-cenro",
-    name: "Bacoor City Environment and Natural Resources Office",
-    type: "lgu",
-    coverage: "Bacoor City, Cavite",
-    region: "IV-A",
-    handles: ["waste", "water", "air", "land"],
-    casesReceived: 21,
-    casesAcknowledged: 21,
-    casesResolved: 16,
-  },
-  {
-    slug: "cebu-city-cenro",
-    name: "Cebu City Environment and Natural Resources Office",
-    type: "lgu",
-    coverage: "Cebu City",
-    region: "VII",
-    handles: ["waste", "air", "water", "land"],
-    casesReceived: 28,
-    casesAcknowledged: 25,
-    casesResolved: 17,
-  },
-  {
-    slug: "navotas-cenro",
-    name: "Navotas City Environment and Natural Resources Office",
-    type: "lgu",
-    coverage: "Navotas City",
+    coverage: "Waterway clearing and flood control across the seventeen Metro Manila LGUs",
     region: "NCR",
-    handles: ["water", "waste", "hazard"],
-    casesReceived: 17,
-    casesAcknowledged: 16,
-    casesResolved: 9,
+    handles: ["waste", "water", "hazard"],
+    match: /\bMMDA\b|Metropolitan Manila Development/i,
   },
   {
-    slug: "kalibo-menro",
-    name: "Kalibo Municipal Environment and Natural Resources Office",
+    slug: "bureau-of-customs",
+    name: "Bureau of Customs",
+    type: "national-agency",
+    coverage: "Wildlife trafficking and waste imports at ports and airports",
+    region: "PH",
+    handles: ["biodiversity", "hazard", "waste"],
+    match: /Customs/i,
+  },
+  {
+    slug: "pnp-maritime",
+    name: "PNP Maritime Group and local police",
+    type: "national-agency",
+    coverage: "Blast fishing, timber and mining enforcement with the environment agencies",
+    region: "PH",
+    handles: ["biodiversity", "forest", "land"],
+    match: /Maritime|Police|\bPNP\b/i,
+  },
+  {
+    slug: "tubbataha-management-office",
+    name: "Tubbataha Management Office",
+    type: "national-agency",
+    coverage: "Tubbataha Reefs Natural Park, Sulu Sea",
+    region: "MIMAROPA",
+    handles: ["biodiversity"],
+    match: /Tubbataha/i,
+  },
+  {
+    slug: "pra-dpwh",
+    name: "Philippine Reclamation Authority and DPWH",
+    type: "national-agency",
+    coverage: "Reclamation, shoreline works and flood control infrastructure",
+    region: "PH",
+    handles: ["land", "water", "hazard"],
+    match: /Reclamation Authority|\bDPWH\b/i,
+  },
+  {
+    slug: "city-municipal-environment-offices",
+    name: "City and municipal environment offices",
     type: "lgu",
-    coverage: "Kalibo, Aklan",
-    region: "VI",
-    handles: ["waste", "air", "water"],
-    casesReceived: 11,
-    casesAcknowledged: 11,
-    casesResolved: 8,
+    coverage: "CENRO, MENRO, health and disaster offices of the cities and municipalities on the map",
+    region: "PH",
+    handles: ["waste", "water", "hazard", "land", "air"],
+    match: /\bENRO\b|City Health|General Services|Disaster Risk|CDRRMO|MDRRMO|municipal government|city government|LGU|Sangguniang/i,
   },
   {
-    slug: "barangay-san-isidro-environment-committee",
-    name: "Barangay San Isidro Environment Committee",
-    type: "barangay",
-    coverage: "One barangay in Bacoor, Cavite",
-    region: "IV-A",
-    handles: ["waste", "water"],
-    casesReceived: 9,
-    casesAcknowledged: 9,
-    casesResolved: 7,
-  },
-  {
-    slug: "bongao-fisherfolk-association",
-    name: "Bongao Fisherfolk Association",
-    type: "ngo",
-    coverage: "Bongao and nearby island barangays",
-    region: "BARMM",
-    handles: ["biodiversity", "water"],
-    casesReceived: 5,
-    casesAcknowledged: 5,
-    casesResolved: 4,
-  },
-  {
-    slug: "navotas-coastal-youth-network",
-    name: "Navotas Coastal Youth Network",
-    type: "youth",
-    coverage: "Coastal barangays in Navotas",
-    region: "NCR",
-    handles: ["water", "waste"],
-    casesReceived: 8,
-    casesAcknowledged: 8,
-    casesResolved: 3,
-  },
-  {
-    slug: "mati-bantay-kalikasan",
-    name: "Mati Bantay Kalikasan Volunteers",
-    type: "ngo",
-    coverage: "Mati and the Davao Oriental coast",
-    region: "XI",
-    handles: ["biodiversity", "waste"],
-    casesReceived: 7,
-    casesAcknowledged: 7,
-    casesResolved: 4,
-  },
-  {
-    slug: "marine-science-institute-partner",
-    name: "Partner marine scientists panel",
+    slug: "environmental-courts",
+    name: "Regional Trial Courts, environmental cases",
     type: "expert",
-    coverage: "National, advisory on marine and coastal cases",
-    region: "NCR",
-    handles: ["biodiversity", "water"],
-    casesReceived: 14,
-    casesAcknowledged: 14,
-    casesResolved: 0,
-  },
-  {
-    slug: "school-division-partner-network",
-    name: "Partner school division network",
-    type: "school",
-    coverage: "Twelve divisions running the LEARN tracks",
-    region: "IV-A",
-    handles: ["waste", "water", "biodiversity"],
-    casesReceived: 4,
-    casesAcknowledged: 4,
-    casesResolved: 2,
+    coverage: "Temporary environmental protection orders and writs under the Rules of Procedure for Environmental Cases",
+    region: "PH",
+    handles: ["land", "hazard", "water"],
+    match: /Regional Trial Court|\bRTC\b/i,
   },
 ];
 
+const RESOLVED = new Set(["resolved", "monitoring"]);
+const REFERRED_OR_LATER = new Set(["referred", "progress", "resolved", "monitoring"]);
+
+function involves(partner: PartnerSeed, c: EarthCase): boolean {
+  return partner.match.test(c.referredTo ?? "") || c.timeline.some((t) => partner.match.test(t.actor));
+}
+
+export const PARTNERS: Partner[] = PARTNER_SEEDS.map(({ match, ...seed }) => {
+  const received = CASES.filter((c) => match.test(c.referredTo ?? ""));
+  // Acknowledged means the office itself appears as an actor on the case
+  // timeline, which is the only evidence of a response the public record holds.
+  const acknowledged = received.filter((c) => c.timeline.some((t) => match.test(t.actor)));
+  const resolved = received.filter((c) => RESOLVED.has(c.status));
+  return {
+    ...seed,
+    casesReceived: received.length,
+    casesAcknowledged: acknowledged.length,
+    casesResolved: resolved.length,
+  };
+}).filter((p) => p.casesReceived > 0 || CASES.some((c) => involves({ ...p, match: PARTNER_SEEDS.find((s) => s.slug === p.slug)!.match }, c)));
+
+// ---------------------------------------------------------------------------
+// Measured quantities pulled out of outcomes and results
+// ---------------------------------------------------------------------------
+
+/** "748.87 metric tons" -> 748870. "1,103.56 kg" -> 1103.56. Anything without a mass unit -> 0. */
+function kilograms(value: string | undefined): number {
+  if (!value) return 0;
+  const m = value.replace(/,/g, "").match(/(-?\d+(?:\.\d+)?)\s*(kg|kilograms?|metric tons?|tons?|tonnes?)\b/i);
+  if (!m) return 0;
+  const n = Number(m[1]);
+  return /kg|kilogram/i.test(m[2] ?? "") ? n : n * 1000;
+}
+
+/** "608" -> 608, "About 1,225" -> 1225, "over 20,000 kg" -> 20000. */
+function count(value: string | undefined): number {
+  if (!value) return 0;
+  const m = value.replace(/,/g, "").match(/-?\d+(?:\.\d+)?/);
+  return m ? Number(m[0]) : 0;
+}
+
+/** Only quantities that were physically taken out: not waste received, dumped or spilled. */
+const WASTE_LABEL = /(waste|garbage|debris|trash|litter).*(removed|collected|recovered|hauled|cleared|diverted)|(removed|collected|recovered|hauled|cleared|diverted).*(waste|garbage|debris|trash|litter)/i;
+const VOLUNTEER_LABEL = /^volunteers/i;
+const PLANTED_LABEL = /seedlings planted|trees planted|hatchlings released/i;
+
+function caseWasteKg(c: EarthCase): number {
+  return (c.outcome ?? []).filter((o) => WASTE_LABEL.test(o.label)).reduce((n, o) => n + kilograms(o.value), 0);
+}
+function missionWasteKg(m: Mission): number {
+  return (m.results ?? []).filter((r) => WASTE_LABEL.test(r.label) && !/recyclables|residuals/i.test(r.label)).reduce((n, r) => n + kilograms(r.value), 0);
+}
+function caseVolunteers(c: EarthCase): number {
+  return (c.outcome ?? []).filter((o) => VOLUNTEER_LABEL.test(o.label)).reduce((n, o) => n + count(o.value), 0);
+}
+function missionVolunteers(m: Mission): number {
+  return (m.results ?? []).filter((r) => VOLUNTEER_LABEL.test(r.label)).reduce((n, r) => n + count(r.value), 0);
+}
+function casePlanted(c: EarthCase): number {
+  return (c.outcome ?? []).filter((o) => /seedlings planted|trees planted/i.test(o.label)).reduce((n, o) => n + count(o.value), 0);
+}
+function missionPlanted(m: Mission): number {
+  return (m.results ?? []).filter((r) => PLANTED_LABEL.test(r.label) && !/hatchlings/i.test(r.label)).reduce((n, r) => n + count(r.value), 0);
+}
+
+// ---------------------------------------------------------------------------
+// EARTH Score: cities and municipalities, from the published rules
+// ---------------------------------------------------------------------------
+
 /**
- * EARTH Score leaderboard. Points are computed from the rules in the concept:
- * missions completed, cases resolved, waste diverted, trees surviving, students
- * educated. The breakdown is shown on the page so nobody has to take the total
- * on trust.
+ * The rules on /score, applied to what is actually documented:
+ *   200  a case resolved (or under monitoring after resolution)
+ *    40  a case that reached a referral
+ *   120  a completed mission with a recorded result
+ *     1  per 5 kg of waste weighed at a completed mission
+ * Trees are scored only when counted alive at 90 days, and no such count exists
+ * yet, so that column is zero. Student completions are Phase 4.
  */
-export const SCORES: ScoreEntry[] = [
-  {
-    rank: 1,
-    name: "Barangay San Isidro",
-    kind: "barangay",
-    municipality: "Bacoor",
-    province: "Cavite",
-    points: 4820,
-    movement: 2,
-    breakdown: { missions: 9, casesResolved: 7, wasteDivertedKg: 3960, treesSurviving: 210, studentsEducated: 640 },
-  },
-  {
-    rank: 2,
-    name: "Bongao Fisherfolk Association",
-    kind: "organisation",
-    municipality: "Bongao",
-    province: "Tawi-Tawi",
-    points: 4610,
-    movement: 5,
-    breakdown: { missions: 6, casesResolved: 4, wasteDivertedKg: 890, treesSurviving: 3780, studentsEducated: 310 },
-  },
-  {
-    rank: 3,
-    name: "Dipolog City National High School",
-    kind: "school",
-    municipality: "Dipolog",
-    province: "Zamboanga del Norte",
-    points: 4185,
-    movement: -1,
-    breakdown: { missions: 11, casesResolved: 3, wasteDivertedKg: 2140, treesSurviving: 420, studentsEducated: 1480 },
-  },
-  {
-    rank: 4,
-    name: "Barangay Poblacion",
-    kind: "barangay",
-    municipality: "Kalibo",
-    province: "Aklan",
-    points: 3970,
-    movement: 1,
-    breakdown: { missions: 7, casesResolved: 5, wasteDivertedKg: 3310, treesSurviving: 180, studentsEducated: 520 },
-  },
-  {
-    rank: 5,
-    name: "Lucena Youth for the Environment",
-    kind: "organisation",
-    municipality: "Lucena",
-    province: "Quezon",
-    points: 3640,
-    movement: 3,
-    breakdown: { missions: 8, casesResolved: 2, wasteDivertedKg: 1120, treesSurviving: 318, studentsEducated: 980 },
-  },
-  {
-    rank: 6,
-    name: "Barangay Bagong Silang",
-    kind: "barangay",
-    municipality: "Cebu City",
-    province: "Cebu",
-    points: 3380,
-    movement: -2,
-    breakdown: { missions: 6, casesResolved: 4, wasteDivertedKg: 2470, treesSurviving: 95, studentsEducated: 410 },
-  },
-  {
-    rank: 7,
-    name: "Los Banos Integrated School",
-    kind: "school",
-    municipality: "Los Banos",
-    province: "Laguna",
-    points: 3120,
-    movement: 4,
-    breakdown: { missions: 5, casesResolved: 1, wasteDivertedKg: 760, treesSurviving: 240, studentsEducated: 1340 },
-  },
-  {
-    rank: 8,
-    name: "Navotas Coastal Youth Network",
-    kind: "organisation",
-    municipality: "Navotas",
-    province: "Metro Manila",
-    points: 2955,
-    movement: 0,
-    breakdown: { missions: 7, casesResolved: 3, wasteDivertedKg: 2890, treesSurviving: 40, studentsEducated: 360 },
-  },
-  {
-    rank: 9,
-    name: "Barangay San Antonio",
-    kind: "barangay",
-    municipality: "Calamba",
-    province: "Laguna",
-    points: 2610,
-    movement: -3,
-    breakdown: { missions: 4, casesResolved: 2, wasteDivertedKg: 1480, treesSurviving: 160, studentsEducated: 480 },
-  },
-  {
-    rank: 10,
-    name: "Mati Bantay Kalikasan Volunteers",
-    kind: "organisation",
-    municipality: "Mati",
-    province: "Davao Oriental",
-    points: 2480,
-    movement: 6,
-    breakdown: { missions: 5, casesResolved: 4, wasteDivertedKg: 640, treesSurviving: 120, studentsEducated: 290 },
-  },
-];
+const completedMissions = MISSIONS.filter((m) => m.status === "completed");
+
+const byPlace = new Map<string, { municipality: string; province: string; cases: EarthCase[]; missions: Mission[] }>();
+for (const c of CASES) {
+  const key = `${c.municipality}|${c.province}`;
+  const entry = byPlace.get(key) ?? { municipality: c.municipality, province: c.province, cases: [], missions: [] };
+  entry.cases.push(c);
+  byPlace.set(key, entry);
+}
+for (const m of completedMissions) {
+  const key = `${m.municipality}|${m.province}`;
+  const entry = byPlace.get(key) ?? { municipality: m.municipality, province: m.province, cases: [], missions: [] };
+  entry.missions.push(m);
+  byPlace.set(key, entry);
+}
+
+export const SCORES: ScoreEntry[] = [...byPlace.values()]
+  .map((place) => {
+    const casesResolved = place.cases.filter((c) => RESOLVED.has(c.status)).length;
+    const referrals = place.cases.filter((c) => REFERRED_OR_LATER.has(c.status)).length;
+    const missionsWithResults = place.missions.filter((m) => (m.results?.length ?? 0) > 0).length;
+    // Only weights from volunteer missions count towards a score. An agency
+    // hauling a channel clear is on the dashboard, not on a community leaderboard.
+    const wasteKg = place.missions.reduce((n, m) => n + missionWasteKg(m), 0);
+    const points =
+      casesResolved * 200 + referrals * 40 + missionsWithResults * 120 + Math.floor(wasteKg / 5);
+    return {
+      rank: 0,
+      name: place.municipality,
+      kind: "municipality" as const,
+      municipality: place.municipality,
+      province: place.province,
+      points,
+      // No previous scoring period exists yet, so nothing has moved.
+      movement: 0,
+      breakdown: {
+        missions: missionsWithResults,
+        casesResolved,
+        wasteDivertedKg: Math.round(wasteKg),
+        treesSurviving: 0,
+        studentsEducated: 0,
+      },
+    };
+  })
+  .filter((s) => s.points > 0)
+  .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name))
+  .slice(0, 10)
+  .map((s, i) => ({ ...s, rank: i + 1 }));
+
+// ---------------------------------------------------------------------------
+// The transparency dashboard counters
+// ---------------------------------------------------------------------------
+
+const resolvedCases = CASES.filter((c) => RESOLVED.has(c.status));
+
+const totalWasteKg =
+  CASES.reduce((n, c) => n + caseWasteKg(c), 0) + completedMissions.reduce((n, m) => n + missionWasteKg(m), 0);
+const totalVolunteers =
+  CASES.reduce((n, c) => n + caseVolunteers(c), 0) + completedMissions.reduce((n, m) => n + missionVolunteers(m), 0);
+const totalPlanted =
+  CASES.reduce((n, c) => n + casePlanted(c), 0) + completedMissions.reduce((n, m) => n + missionPlanted(m), 0);
 
 /**
- * The transparency dashboard counters.
- *
- * Several of these are DERIVED from the case and mission data rather than typed in,
- * so the dashboard can never quietly disagree with the pages it summarises. That is
- * the whole point of a transparency dashboard, and getting it wrong on a demo would
- * be a bad joke.
- *
  * Every metric carries a `basis` line saying exactly what is counted. A number
  * without a stated basis is a claim, not a measurement.
  */
-
-const resolvedCases = CASES.filter((c) => c.status === "resolved" || c.status === "monitoring");
-const completedMissions = MISSIONS.filter((m) => m.status === "completed");
-
-/** Pull a numeric value out of a result label such as "2,340 kg" or "4,200". */
-function numberFrom(value: string | undefined): number {
-  if (!value) return 0;
-  const match = value.replace(/,/g, "").match(/-?\d+(\.\d+)?/);
-  return match ? Number(match[0]) : 0;
-}
-
-function sumMissionResult(label: string): number {
-  return completedMissions.reduce(
-    (total, mission) => total + numberFrom(mission.results?.find((r) => r.label === label)?.value),
-    0,
-  );
-}
-
 export const IMPACT: ImpactMetric[] = [
   {
     key: "cases-reported",
-    label: "Cases reported",
+    label: "Cases on record",
     value: CASES.length,
-    basis: "Every case filed on the platform, at any status, including those not yet verified.",
+    basis: "Every case on the platform at any status: documented 2026 incidents and reports filed here, including those not yet verified.",
     href: "/cases",
   },
   {
     key: "cases-resolved",
     label: "Cases resolved",
     value: resolvedCases.length,
-    basis: "Cases confirmed fixed by a return visit. Includes those now under monitoring.",
+    basis: "Cases whose public record shows the problem fixed or contained, including those now under monitoring.",
     href: "/cases?status=resolved",
   },
   {
@@ -343,37 +320,37 @@ export const IMPACT: ImpactMetric[] = [
   {
     key: "volunteers",
     label: "Volunteers mobilised",
-    value: sumMissionResult("Volunteers") + sumMissionResult("Volunteers across four cleanups"),
-    basis: "Attendance recorded on the day at completed missions, not sign-ups.",
+    value: totalVolunteers,
+    basis: "Attendance reported by organisers at completed missions and documented clean-ups, not sign-ups.",
     href: "/act",
   },
   {
     key: "waste",
-    label: "Waste collected",
-    value: sumMissionResult("Waste collected"),
+    label: "Waste removed",
+    value: Math.round(totalWasteKg),
     unit: "kg",
-    basis: "Weighed at completed missions. Excludes anything cleared by an agency without a weight recorded.",
+    basis: "Weights reported by the agency or organiser, converted to kilograms. Anything reported only as sacks or truckloads is not counted.",
     href: "/act",
   },
   {
     key: "trees",
-    label: "Trees and mangroves surviving",
-    value: sumMissionResult("Surviving at 90 days") + sumMissionResult("Surviving at 60 days"),
-    basis: "Counted at 60 or 90 days after planting, not on planting day. This is a much smaller number than trees planted, and it is the honest one.",
+    label: "Trees and mangroves planted",
+    value: totalPlanted,
+    basis: "Seedlings planted at documented 2026 events. Survival is counted separately at 90 days, and no survival count exists yet.",
     href: "/act",
   },
   {
     key: "communities",
-    label: "Communities reached",
-    value: new Set(CASES.map((c) => `${c.barangay}, ${c.municipality}`)).size,
-    basis: "Distinct barangays with at least one case on the platform.",
+    label: "Cities and municipalities",
+    value: new Set(CASES.map((c) => `${c.municipality}, ${c.province}`)).size,
+    basis: "Distinct cities and municipalities with at least one case on the platform.",
     href: "/map",
   },
   {
     key: "partners",
-    label: "Partner organisations",
+    label: "Offices in the routing network",
     value: PARTNERS.length,
-    basis: "LGUs, national agencies, barangays, schools, organisations and experts currently receiving referrals.",
+    basis: "National agencies, local offices and courts that appear on the record of at least one case.",
     href: "/connect",
   },
 ];

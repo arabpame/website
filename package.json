@@ -20,6 +20,8 @@
     "doctor": "node scripts/doctor.mjs",
     "clean": "node scripts/clean.mjs",
     "map:build": "node scripts/build-map.mjs",
+    "places:build": "node scripts/build-places.mjs",
+    "data:build": "node scripts/compile-data.mjs",
     "assets:build": "node scripts/build-assets.mjs",
     "photos:optimize": "node scripts/optimize-photos.mjs",
     "vercel:login": "npx --yes vercel login",

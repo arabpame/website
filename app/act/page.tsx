@@ -105,7 +105,7 @@ export default async function ActPage() {
                       {mission.title}
                     </h3>
                     <p className="mt-1.5 text-xs text-brand-paper/55">
-                      {mission.barangay}, {mission.municipality}, {mission.province}
+                      {[mission.barangay, mission.municipality, mission.province].filter(Boolean).join(", ")}
                     </p>
                     {mission.caseNumber ? (
                       <p className="mt-3">
@@ -239,7 +239,7 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
           {mission.title}
         </h3>
         <p className="mt-1.5 text-xs text-brand-ink/55">
-          {mission.barangay}, {mission.municipality}, {mission.province}
+          {[mission.barangay, mission.municipality, mission.province].filter(Boolean).join(", ")}
         </p>
 
         <p className="mt-4 flex-1 text-sm leading-relaxed text-brand-ink/70">{mission.summary}</p>
@@ -261,6 +261,13 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
         ) : null}
 
         <div className="mt-6 border-t border-brand-line pt-4">
+          {mission.capacity === 0 ? (
+            <p className="text-xs text-brand-ink/60">
+              <span className="font-semibold text-brand-deep">{mission.organiser}</span>
+              {mission.status === "completed" ? " · completed" : " · places managed by the organiser"}
+            </p>
+          ) : (
+          <>
           <div className="flex items-center justify-between gap-3 text-xs">
             <span className="font-data text-brand-ink/60">
               {mission.registered} of {mission.capacity} places
@@ -280,6 +287,8 @@ function MissionCard({ mission, index }: { mission: Mission; index: number }) {
           <div aria-hidden="true" className="mt-2 h-1.5 overflow-hidden rounded-full bg-brand-line">
             <div className="h-full rounded-full bg-brand-primary" style={{ width: `${pct}%` }} />
           </div>
+          </>
+          )}
           {mission.caseNumber ? (
             <p className="mt-3">
               <CaseNumber caseNumber={mission.caseNumber} />

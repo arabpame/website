@@ -251,7 +251,7 @@ export function Hero({
                   {latest.title}
                 </p>
                 <p className="mt-1 text-xs text-brand-paper/55">
-                  {latest.barangay}, {latest.municipality}, {latest.province}
+                  {[latest.barangay, latest.municipality, latest.province].filter(Boolean).join(", ")}
                 </p>
                 <CaseChip caseNumber={latest.caseNumber} status={latest.status} onInk className="mt-3" />
               </Link>

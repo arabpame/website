@@ -44,6 +44,7 @@ const KIND_LABEL = {
   barangay: "Barangay",
   school: "School",
   organisation: "Organisation",
+  municipality: "City or municipality",
 } as const;
 
 export default async function ScorePage() {

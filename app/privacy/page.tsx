@@ -49,8 +49,8 @@ export default function PrivacyPage() {
             >
               {CONTACT.email}
             </a>
-            . A registered address and a named Data Protection Officer will be published here before any
-            live collection begins.
+            . A registered address and a named Data Protection Officer will be published here as soon as
+            the organisation is registered.
           </p>
         </LegalSection>
 

@@ -11,19 +11,22 @@ Written for someone who has never opened a terminal. Nothing here requires code.
 
 ## What this website is, right now
 
-This is the **design build**. Every screen of the full EARTHLINK platform exists, works, and
-can be clicked through. What it does not have yet is a database, which means:
+EARTHLINK is live. Every screen works, and two things on it are real in the fullest sense:
 
-- Nothing anyone types into the report form is saved or sent anywhere.
-- Every case, mission, volunteer count and organisation you see is **made up**, written to
-  show what the platform will look like when it is real.
-- A yellow-green notice at the top of every page says exactly that, in plain words.
+- **Reports are real.** Anything filed on the Report page is saved, given a permanent case
+  number, pinned on the map, given its own public case page, and emailed to you with the
+  photographs attached. Since 16 September 2026.
+- **The cases are real.** Every case in the register is a documented 2026 incident taken from
+  published news reporting or an official release, and the sources are listed on the case page.
+  Nothing is invented. The partner counts, the EARTH Score and every dashboard number are
+  calculated from those cases.
 
-**Leave that notice alone.** It is the single most important thing protecting your
-credibility. If a judge, an LGU officer or a sponsor believed those resolved-case numbers
-were real and later found out they were not, the damage would be very hard to undo. The
-notice makes the demonstration honest, and an honest demonstration of a serious platform is
-far more impressive than a dishonest one.
+What is not built yet: accounts, an admin screen, and messages back to reporters. Filed
+reports are read and updated in the Supabase dashboard for now.
+
+**Do not put invented data back.** A judge, an LGU officer or a sponsor who finds one made-up
+case will doubt every real one. If you want a case on the site, file it through the Report
+page or add it to the research record with its source.
 
 ## The pages, and what each one is for
 
@@ -63,15 +66,75 @@ Please do not let anyone talk you into removing those lines to make the numbers 
 A five-minute route that lands well:
 
 1. **Home.** Let them see the map with the case pins. Scroll to the six-state pipeline.
-2. **Report.** Fill in the first step. Show that it validates, and that it works on a phone.
-3. **A case page.** Open any resolved case, for example the Bacoor creek one. Show the full
-   timeline, the referral date, and the measured result at the bottom.
-4. **Track.** Scroll to "Cases referred and still waiting". This is the slide that wins the
+2. **A case page.** Open a case they may have heard of, for example the Binaliw landfill
+   collapse in Cebu City or the Magat Dam fish kill. Show the timeline, the office it was
+   referred to, the measured figures, and the sources at the bottom.
+3. **Report.** File a report live. See the next section. This is the moment that proves the
+   platform is operating and not a mock-up.
+4. **The map, again.** Their pin is on it. Open the new case page and walk the six stages.
+5. **Track.** Scroll to "Cases referred and still waiting". This is the slide that wins the
    room, because no other environmental platform in the country publishes it.
-5. **EARTH Kids.** Close on the children's section if the audience is a school or a judge.
 
-If someone asks "is this real?", the honest answer is the strong one: the platform is real
-and built, and the data in it is a demonstration until Phase 2 connects the database.
+If someone asks "is this real?", the answer is yes, twice: the report you just filed is in the
+database and in the founder's inbox, and every other case is a documented incident with its
+sources on the page.
+
+## Filing a report live, in front of an audience
+
+Rehearse this twice before the day. It takes about ninety seconds.
+
+**Before you go on**
+
+- Have the site open on your phone at `/report`, on mobile data, not venue Wi-Fi.
+- Have two or three photographs already in your camera roll. Anything of a real problem you
+  have seen. Do not take a photo of the audience.
+- Make sure your Resend inbox is open on the laptop or the screen, so the email can be shown
+  arriving.
+- Decide the location in advance. Type it, do not rely on the venue's GPS. City and province
+  are enough; the barangay is optional.
+
+**The four steps, spoken aloud**
+
+1. **What you saw.** Pick the category ("seven categories, and they decide which office the
+   case is routed to"). Type a short title and a sentence or two. Enter the date. Choose the
+   urgency.
+2. **Where it is.** Type the city or municipality and the province. Say that the platform
+   knows every city and municipality in the country and places the pin itself.
+3. **Evidence.** Tap "Tap to add photographs" and pick two. Say they are resized on the phone
+   before sending, so it works on mobile data.
+4. **About you.** Tick the consent box. Say that a name is optional and that anonymous
+   reports get a case number too. Tap "File this report".
+
+**What they see next**
+
+- The case number, for example EARTH-2026-0104. "Permanent, never reused."
+- "Open the case page": the report is already a public page with the six-stage pipeline at
+  Reported.
+- "See it on the map": the new pin.
+- On the laptop: the email, with the photographs attached, within a few seconds.
+
+**What happens after, and what to say**
+
+- Reported, then Under verification: the team checks it and merges duplicates.
+- Referred: sent to the responsible office with the evidence. The public page shows how many
+  days it has waited.
+- In progress, Resolved, Monitoring: the result is measured, and the case is watched.
+- For now the status is changed by you in the Supabase dashboard; the next build stage puts a
+  verification screen on the site.
+
+**If something goes wrong**
+
+- "Reporting is temporarily unavailable": the four environment variables are not set on
+  Vercel. Nothing is lost; set them and redeploy. Check this the day before, not on the day.
+- "We could not find that city or municipality": check the spelling of both fields, or write
+  "Metro Manila" as the province for an NCR city.
+- No email arrives: the report is still saved and on the map. Resend only delivers to the
+  address that owns the Resend account until a domain is verified.
+
+**Afterwards**
+
+Delete the test report's row in Supabase so the register stays honest, or keep it if a judge
+filed a real concern.
 
 ## What you will need to supply before this can go live
 
@@ -106,26 +169,26 @@ exist so a broken or dishonest page cannot reach the public by accident.
 All of the site's text lives inside the page files. Ask a developer, or Claude, to change the
 wording on a named page. It is a small job.
 
-**"I want to add a new case to the demonstration."**
-`data/cases.ts`. Copy an existing entry and change the values. The coordinates must be real:
-a check runs before every build that confirms every case lands inside the region it claims,
-and it will fail the build if a pin would appear in the wrong sea.
+**"I want to add a case that was in the news."**
+Add it to the right `data/source/cases-*.json` file with its source URLs, then run
+`npm run data:build`. The script places it on the map from the city and province, numbers it,
+and refuses to write anything if a source is missing or a place cannot be found. Do not edit
+`data/cases.ts` by hand: it is generated.
 
 **"The numbers on the dashboard are wrong."**
 They are calculated from the cases and missions, not typed in. If a case changes, the
 dashboard changes with it. That is deliberate, so the dashboard can never quietly disagree
 with the pages it summarises.
 
-**"Someone filled in the report form with a real problem."**
-They were told on screen that nothing was sent. If they contact you, take the details by
-email and pass them to the barangay or city environment office yourself. Then note it down:
-that is your first real case, and it is worth having when you argue for Phase 2 funding.
+**"Someone filed a report."**
+You have the email with the photographs. Open the case in Supabase, check it, and change its
+`status` as it moves: verifying, referred, progress, resolved, monitoring. The public case page
+shows the new status on the next visit. Reply to the reporter yourself from the email if they
+left a contact.
 
 ## Daily routine checklist
 
-While this is a demonstration there is no daily routine. Once Phase 2 is live:
-
-- [ ] Check the moderation queue for new reports.
+- [ ] Read every new report email. Each one is also a row in Supabase.
 - [ ] Verify or merge anything that has been waiting more than three days.
 - [ ] Check which referrals are approaching thirty days and chase them.
 - [ ] Reply to anything in the enquiry inbox.
@@ -135,7 +198,7 @@ While this is a demonstration there is no daily routine. Once Phase 2 is live:
 - [ ] `npm run verify` passes.
 - [ ] Every page has been looked at on a phone, not only on a laptop.
 - [ ] No placeholder text anywhere the public can see.
-- [ ] The sample-data notice is still visible, and still accurate.
+- [ ] The Report page files a test report on the live site, and the email arrives.
 - [ ] Every number still has its explanation line underneath it.
 
 ## Troubleshooting
@@ -163,9 +226,9 @@ It stays visible at "Referred to authorities" and the number of days it has been
 keeps climbing, in public, on the Track page. That pressure is the point of the platform.
 
 **Is the map real?**
-The country is. The coastline and all seventeen regions come from Philippine Statistics
-Authority boundary data. The pins are sample cases, but they are plotted by real coordinates,
-so the map is genuinely accurate.
+Yes. The coastline and all seventeen regions come from Philippine Statistics Authority
+boundary data. Each pin is placed at the centre of the city or municipality the case names,
+unless the reporter used their phone's location, in which case it is exactly where they stood.
 
 **Can this be translated into Filipino?**
 Not yet, and it should be. It is recorded as a real limitation on the accessibility page
@@ -194,7 +257,7 @@ client build for no benefit here.
 ```
 Server Component (default)
     reads via lib/store.ts
-        which reads data/*.ts today, and Supabase in Phase 2
+        which merges filed reports (Supabase, lib/reports) with the documented cases (data/cases.ts)
 
 Client Component ("use client", at the leaf only)
     Header, MapExplorer, ReportForm, ContactForm, Reveal
@@ -205,7 +268,7 @@ Three rules that keep it that way:
 
 1. **Server Components by default.** `"use client"` goes at the leaf, never on a layout. One
    `"use client"` near the root drags the whole tree into the bundle and wrecks INP.
-2. **Pages never import from `data/`.** They import from `lib/store.ts`. In Phase 2 that one
+2. **Pages never import from `data/`.** They import from `lib/store.ts`. When accounts arrive that one
    file changes and no page component does.
 3. **Store functions are async even though nothing awaits.** Same reason. A synchronous call
    site would have to be rewritten later.
@@ -225,7 +288,11 @@ npm run dev     # port 3033, matching the project folder number
 
 ## Environment variables
 
-None required in Phase 1. `.env.example` documents the Phase 2 set.
+None are needed to build or browse. Live report intake needs four, from two dashboards:
+`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY` and
+`REPORTS_TO_EMAIL`. `.env.example` lists them and `supabase/README.md` walks through
+getting them. On a laptop without them, reports go to a file under `.cache/` so the flow can be
+tested offline. On Vercel without them, the Report page says reporting is unavailable.
 
 ## Build process
 
@@ -248,27 +315,33 @@ GitHub `main` to Vercel, auto-deploy. Preview deploys on branches.
 | `MapExplorer` | The client-side filtering map. Memoises the 457 shapes: do not remove that. |
 | `PhotoFrame` | Tone-matched placeholder with grain and a visible tag. Cycles tones so adjacent placeholders differ. |
 | `PageHeader` | The dark band every inner page opens with. |
-| `DemoBanner` / `DemoNote` | Driven by `IS_DEMO`. Gated by the QA check. |
 | `Reveal` | CSS-first scroll reveal with a 1200ms failsafe. Content is visible by default. |
 
 ## APIs and server actions
 
-None yet. The forms are client-side with real validation and no submission. In Phase 2,
-`ReportForm.handleSubmit` becomes a Server Action that validates with zod, rate limits by IP,
-checks a Turnstile token, persists, then sends mail. Persist before sending, always: email is
-not a database.
+Two Server Actions, no API routes.
+
+- `app/report/actions.ts`, `fileReport(FormData)`: honeypot, full re-validation, location
+  resolution through `lib/places.ts`, rate limit (five per IP hash per hour), insert, store
+  photographs, email, `revalidatePath`. Persist before sending, always: email is not a
+  database. Returns the case number or field errors keyed by field id.
+- `app/contact/actions.ts`, `sendEnquiry(FormData)`: honeypot, validation, one email with
+  the sender as reply-to.
 
 ## Database and RLS
 
-Not yet. When it arrives: enable row level security on every table with no exceptions, index
-every column referenced in a policy, and wrap `auth.uid()` in a subselect so Postgres
-evaluates it once rather than per row.
+Supabase. One table, `public.reports`, and one private bucket, `evidence`. Row level
+security is on with no policies at all, so the anon key can read and write nothing. Only the
+server, with the service role key, touches the data, and it selects the public columns only
+when listing. Case numbers come from a trigger. Migration: `supabase/migrations/0001_reports.sql`.
+When accounts arrive: index every column a policy references, and wrap `auth.uid()` in a
+subselect so Postgres evaluates it once rather than per row.
 
 ## Auth model
 
-None yet. Phase 2 uses Supabase Auth for citizen and partner accounts, and a signed cookie
-session for the owner-only admin. Fail closed: never `process.env.ADMIN_PASSWORD || "literal"`.
-`npm run security` fails the build on that pattern.
+None yet. The next stage uses Supabase Auth for partner accounts and a signed cookie session
+for the owner-only verification screen. Fail closed: never `process.env.ADMIN_PASSWORD ||
+"literal"`. `npm run security` fails the build on that pattern.
 
 ## Coding conventions
 
@@ -300,7 +373,7 @@ Gitignore protects the repo, not the disk.
 | `grammar-check.mjs` | Em dashes across everything; spelling and repeated words over extracted prose only |
 | `security-check.mjs` | See above |
 | `verify-map.mjs` | 19 real cities land in their real regions |
-| `verify-cases.mjs` | Every sample case lands in the region it claims |
+| `verify-cases.mjs` | Every documented case lands in the region it claims |
 
 The last two matter more than they look. A pin in the wrong sea is the most obvious way this
 demonstration could embarrass someone presenting it.

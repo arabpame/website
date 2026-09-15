@@ -25,15 +25,6 @@ export const CONTACT = {
   email: "hello@earthlink.ph",
   reportsEmail: "reports@earthlink.ph",
   partnersEmail: "partners@earthlink.ph",
-  /**
-   * Placeholders until the client supplies real details. The QA script flags any
-   * value here that still begins with "TO BE" so they cannot ship by accident.
-   */
-  phone: "TO BE SUPPLIED",
-  addressLine: "TO BE SUPPLIED",
-  city: "TO BE SUPPLIED",
-  region: "TO BE SUPPLIED",
-  postalCode: "TO BE SUPPLIED",
 } as const;
 
 export const FOUNDER = {
@@ -62,13 +53,13 @@ export const BUILDER = {
 } as const;
 
 /**
- * The project is a design build. Every screen carries sample data, and that must
- * never be mistaken for a real environmental record. This flag drives the visible
- * demonstration banner, and it is deliberately not an environment variable: the
- * banner has to be removed by an intentional code change when real data arrives,
- * not switched off by whoever last edited a Vercel setting.
+ * Set to true while the site carried invented sample data, this flag showed the
+ * sample-data notices on every screen. It was switched off on 16 September 2026
+ * when the Report page went live and the sample cases were replaced by documented
+ * 2026 incidents with sources. It is a constant, not an environment variable, so
+ * that switching it either way is a deliberate code change.
  */
-export const IS_DEMO = true;
+export const IS_DEMO = false;
 
 /**
  * The full-width notice at the top of every page, above the header.

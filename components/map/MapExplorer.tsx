@@ -214,7 +214,7 @@ export function MapExplorer({ cases }: { cases: EarthCase[] }) {
                 <div className="min-w-0">
                   <p className="text-sm font-bold leading-snug text-brand-paper">{selectedCase.title}</p>
                   <p className="mt-1 text-xs text-brand-paper/60">
-                    {selectedCase.barangay}, {selectedCase.municipality}, {selectedCase.province}
+                    {[selectedCase.barangay, selectedCase.municipality, selectedCase.province].filter(Boolean).join(", ")}
                   </p>
                 </div>
                 <button

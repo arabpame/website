@@ -155,8 +155,8 @@ export default async function LearnPage() {
             <h2 className="text-display-md">About this curriculum</h2>
             <p className="mt-5 text-base leading-relaxed text-brand-ink/75">
               The structure, sequencing and lesson design shown here are complete. The lesson content
-              itself is written in Phase 4 of the build, with teachers, and reviewed against the DepEd
-              curriculum before any school uses it.
+              itself is being written with teachers and reviewed against the DepEd curriculum before
+              any school uses it.
             </p>
             <p className="mt-4 text-base leading-relaxed text-brand-ink/75">
               That order is deliberate. Environmental education that is factually shaky does more harm

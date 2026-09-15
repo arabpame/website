@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { sendEnquiry } from "@/app/contact/actions";
 import { cn } from "@/lib/utils";
 
 /**
  * The general enquiry form.
  *
- * Like the report form, this is the complete designed flow with real validation
- * and no backend. It says so on submit rather than silently discarding a message.
+ * Validated here, validated again on the server, then emailed to the EARTHLINK
+ * inbox through the sendEnquiry Server Action with the sender as reply-to.
  *
- * Phase 1 covers three routed forms (enquiry, volunteer, partner). They are one
- * component with a topic selector rather than three near-identical forms, because
- * three copies of a form is three places for validation to drift apart.
+ * Three routed forms (enquiry, volunteer, partner) are one component with a
+ * topic selector rather than three near-identical forms, because three copies of
+ * a form is three places for validation to drift apart.
  */
 
 const TOPICS = [
@@ -35,6 +36,8 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
   const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
   const selected = TOPICS.find((t) => t.key === topic)!;
 
@@ -51,9 +54,24 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
-    // A filled honeypot means a bot. Show the same success state rather than an
-    // error, so the bot learns nothing about why it failed.
-    setSent(true);
+    const data = new FormData();
+    data.set("website", website);
+    data.set("topic", topic);
+    data.set("name", name);
+    data.set("email", email);
+    data.set("organisation", organisation);
+    data.set("message", message);
+    setFailure(null);
+
+    startTransition(async () => {
+      try {
+        const outcome = await sendEnquiry(data);
+        if (outcome.ok) setSent(true);
+        else setFailure(outcome.message ?? "The message could not be sent. Please try again.");
+      } catch {
+        setFailure("The message could not be sent. Check your connection and try again.");
+      }
+    });
   }
 
   if (sent) {
@@ -64,22 +82,21 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
             <path d="M4 12.5 9.5 18 20 6.5" />
           </svg>
         </div>
-        <h2 className="mt-5 text-display-md">This is what you would see</h2>
+        <h2 className="mt-5 text-display-md">Message sent</h2>
         <p className="mt-4 text-sm leading-relaxed text-brand-ink/75">
-          Your message would be routed to {selected.to} and you would get a confirmation by email within
-          a minute.
+          Your message has gone to {selected.to}. Replies come from the EARTHLINK inbox to the email
+          address you gave, usually within a few days.
         </p>
 
-        <div className="mt-6 rounded-xl border border-status-referred/30 bg-status-referred/[0.07] p-5">
-          <p className="text-sm font-bold text-status-referred-text">Nothing was actually sent</p>
-          <p className="mt-2 text-sm leading-relaxed text-brand-ink/75">
-            This is the Phase 1 design build. There is no mail service connected yet, so your message
-            was not stored and not delivered to anyone.
-          </p>
-        </div>
-
-        <button type="button" onClick={() => setSent(false)} className="btn-outline mt-7">
-          Back to the form
+        <button
+          type="button"
+          onClick={() => {
+            setSent(false);
+            setMessage("");
+          }}
+          className="btn-outline mt-7"
+        >
+          Send another message
         </button>
       </div>
     );
@@ -193,9 +210,18 @@ export function ContactForm({ defaultTopic = "other" }: { defaultTopic?: TopicKe
         />
       </div>
 
+      {failure ? (
+        <div
+          role="alert"
+          className="mt-6 rounded-xl border border-status-reported/40 bg-status-reported/[0.07] p-4 text-sm leading-relaxed text-status-reported-text"
+        >
+          {failure}
+        </div>
+      ) : null}
+
       <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-brand-line pt-6">
-        <button type="submit" className="btn-primary">
-          Send message
+        <button type="submit" disabled={pending} className="btn-primary disabled:opacity-60">
+          {pending ? "Sending..." : "Send message"}
         </button>
         <p className="text-xs leading-relaxed text-brand-ink/55">
           Handled under the Data Privacy Act of 2012. Never shared or sold.

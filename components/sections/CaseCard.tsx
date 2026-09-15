@@ -46,13 +46,13 @@ export function CaseCard({
 
         <div className="mt-auto pt-5">
           <p className="text-xs text-brand-ink/55">
-            {item.barangay}, {item.municipality}, {item.province}
+            {[item.barangay, item.municipality, item.province].filter(Boolean).join(", ")}
           </p>
           <div className="mt-3 border-t border-brand-line pt-3">
             <CaseChip caseNumber={item.caseNumber} status={item.status} />
             <p className="mt-2 font-data text-[0.6875rem] text-brand-ink/45">
               Reported {formatDateShort(item.reportedOn)}
-              {item.evidenceCount > 0 ? ` · ${item.evidenceCount} files of evidence` : ""}
+              {item.evidenceCount > 0 ? ` · ${item.evidenceCount} ${item.evidenceCount === 1 ? "file" : "files"} of evidence` : ""}
             </p>
           </div>
         </div>

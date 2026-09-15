@@ -126,7 +126,7 @@ export default async function MapPage() {
                 {
                   term: "Why not a tile provider",
                   detail:
-                    "No API key to leak, no per-load bill, no content security policy problem, and it works with no network at all. A licensed tile provider belongs in Phase 2, when there is real geodata and clustering at national scale.",
+                    "No API key to leak, no per-load bill, no content security policy problem, and it works with no network at all. A licensed tile provider can be added later, when clustering at national scale is needed.",
                 },
                 {
                   term: "Rendering",

@@ -327,7 +327,7 @@ export default async function HomePage() {
                 <CaseChip caseNumber={item.caseNumber} status={item.status} />
                 <h3 className="mt-4 text-lg font-bold leading-snug text-brand-deep">{item.title}</h3>
                 <p className="mt-1 text-xs text-brand-ink/55">
-                  {item.barangay}, {item.municipality}, {item.province}
+                  {[item.barangay, item.municipality, item.province].filter(Boolean).join(", ")}
                 </p>
 
                 <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-brand-line pt-6">
@@ -404,7 +404,7 @@ export default async function HomePage() {
                     {mission.title}
                   </h3>
                   <p className="mt-2 text-xs text-brand-ink/55">
-                    {mission.barangay}, {mission.municipality}, {mission.province}
+                    {[mission.barangay, mission.municipality, mission.province].filter(Boolean).join(", ")}
                   </p>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-brand-ink/70">
                     {mission.summary}

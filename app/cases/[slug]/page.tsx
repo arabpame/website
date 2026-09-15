@@ -8,10 +8,8 @@ import {
   ButtonLink,
   CategoryChip,
   Eyebrow,
-  PhotoFrame,
   UrgencyChip,
 } from "@/components/ui/Primitives";
-import { DemoNote } from "@/components/layout/DemoBanner";
 import { getCase, getCaseSlugs, getMissionsForCase } from "@/lib/store";
 import { STATUS_META, STATUS_ORDER } from "@/lib/taxonomy";
 import { JsonLd, MAX_DESCRIPTION, MAX_PAGE_TITLE, breadcrumbJsonLd, pageMeta, trim } from "@/lib/seo";
@@ -123,26 +121,50 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
               <h2 className="text-display-md">What was reported</h2>
               <p className="mt-5 text-lg leading-relaxed text-brand-ink/80">{item.summary}</p>
 
-              {/* Evidence */}
+              {/* Evidence and sources */}
               <div className="mt-12">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <h2 className="text-display-md">Evidence</h2>
                   <span className="font-data text-xs text-brand-ink/50">
-                    {item.evidenceCount} files attached
+                    {item.evidenceCount} {item.evidenceCount === 1 ? "file" : "files"} attached
                   </span>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-brand-ink/65">
-                  Photographs and video submitted with the reports, stored permanently against the case
-                  so the record cannot be disputed later.
-                </p>
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <PhotoFrame aspect="4/3" tone={0} />
-                  <PhotoFrame aspect="4/3" tone={2} />
-                </div>
-                <p className="mt-3 text-xs leading-relaxed text-brand-ink/55">
-                  Evidence storage is Phase 2 of the build. Photographs supplied by the client will
-                  replace these placeholders.
-                </p>
+                {item.sources && item.sources.length > 0 ? (
+                  <>
+                    <p className="mt-3 text-sm leading-relaxed text-brand-ink/65">
+                      This case is documented in public reporting. Every fact on this page comes from the
+                      sources below, which are kept against the case so the record can be checked.
+                    </p>
+                    <ul className="mt-6 space-y-3">
+                      {item.sources.map((source) => (
+                        <li key={source.url} className="rounded-xl border border-brand-line bg-brand-paper p-4">
+                          <a
+                            href={source.url}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="text-sm font-semibold leading-snug text-brand-deep underline decoration-brand-primary/40 underline-offset-2 transition-colors hover:text-brand-primary"
+                          >
+                            {source.title}
+                          </a>
+                          <p className="mt-1 font-data text-[0.6875rem] text-brand-ink/55">
+                            {source.outlet} · {formatDateShort(source.date)}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : item.evidenceCount > 0 ? (
+                  <p className="mt-3 text-sm leading-relaxed text-brand-ink/65">
+                    Photographs submitted with the report are stored privately against the case and are
+                    shared with the verification team and the office the case is referred to. They are not
+                    published, so that people who appear in them are protected.
+                  </p>
+                ) : (
+                  <p className="mt-3 text-sm leading-relaxed text-brand-ink/65">
+                    No photographs were attached to this report. If you have seen this problem, file your
+                    own report with photographs and it will be merged into this case.
+                  </p>
+                )}
               </div>
 
               {/* Timeline */}
@@ -256,7 +278,7 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                 <div className="on-ink overflow-hidden rounded-2xl bg-brand-ink p-5">
                   <Eyebrow onInk>Location</Eyebrow>
                   <p className="mt-3 text-sm font-semibold text-brand-paper">
-                    {item.barangay}, {item.municipality}
+                    {[item.barangay, item.municipality].filter(Boolean).join(", ")}
                   </p>
                   <p className="text-xs text-brand-paper/60">
                     {item.province} · Region {item.region}
@@ -319,10 +341,18 @@ export default async function CasePage({ params }: { params: Promise<{ slug: str
                   </ButtonLink>
                 </div>
 
-                <DemoNote>
-                  This is a sample case created to demonstrate the design. It is not a real
-                  environmental report, and no real organisation named here has received it.
-                </DemoNote>
+                {item.source === "report" ? (
+                  <p className="flex items-start gap-2 text-xs leading-relaxed text-brand-ink/55">
+                    <svg aria-hidden="true" viewBox="0 0 16 16" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-primary" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                      <circle cx="8" cy="8" r="6.5" />
+                      <path d="M8 7.2v4M8 4.9h.01" />
+                    </svg>
+                    <span>
+                      Filed through the EARTHLINK Report page and awaiting verification. Details are as
+                      the reporter gave them and have not yet been checked.
+                    </span>
+                  </p>
+                ) : null}
               </div>
             </aside>
           </div>

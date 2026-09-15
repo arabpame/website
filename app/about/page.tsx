@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { ArrowLink, ButtonLink, Eyebrow, PhotoFrame, SectionHeading } from "@/components/ui/Primitives";
-import { BUILDER, CORE_FUNCTIONS, FOUNDER, PHASES } from "@/lib/constants";
+import { BUILDER, CORE_FUNCTIONS, FOUNDER } from "@/lib/constants";
 import { JsonLd, breadcrumbJsonLd, pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -157,7 +157,7 @@ export default function AboutPage() {
               <p className="mt-4 text-base leading-relaxed text-brand-ink/70">
                 EARTH Ambassadors educate their classmates, report concerns in their own barangays,
                 organise local initiatives and bring their communities in. Not as helpers on somebody
-                else's campaign. As the people running it.
+                else&apos;s campaign. As the people running it.
               </p>
               <ButtonLink href="/ambassadors" className="mt-8">
                 The EARTH Ambassador programme
@@ -171,56 +171,22 @@ export default function AboutPage() {
       <section id="phases" className="section scroll-mt-28">
         <div className="container">
           <SectionHeading
-            eyebrow="The build"
-            title="What exists today, and what does not"
-            lead="EARTHLINK as described is five separate systems and roughly 130 build days of work. Pretending it is finished would be the fastest way to lose the trust the platform is asking for."
+            eyebrow="How it works"
+            title="What the platform does today, and where it goes next"
+            lead="EARTHLINK is built in stages, in the open. Every number on the site says what it counts, and every case says where its record came from."
             className="max-w-2xl"
           />
 
-          <ol className="mt-12 space-y-3">
-            {PHASES.map((phase) => (
-              <li
-                key={phase.number}
-                className={`flex flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-2xl border p-5 ${
-                  phase.status === "in-build"
-                    ? "border-brand-signal-600/40 bg-brand-signal/[0.08]"
-                    : "border-brand-line bg-brand-surface"
-                }`}
-              >
-                <div className="flex min-w-0 items-center gap-4">
-                  <span className="font-data text-xs font-medium text-brand-primary">
-                    Phase {phase.number}
-                  </span>
-                  <span className="text-sm font-bold text-brand-deep">{phase.name}</span>
-                </div>
-                <div className="flex items-center gap-6">
-                  <span className="font-data text-xs text-brand-ink/55">
-                    {phase.functions} functions · {phase.days} days
-                  </span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                      phase.status === "in-build"
-                        ? "bg-brand-signal text-brand-ink"
-                        : "bg-brand-paper text-brand-ink/60 ring-1 ring-inset ring-brand-line"
-                    }`}
-                  >
-                    {phase.status === "in-build" ? "This build" : "Planned"}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ol>
-
           <div className="mt-12 grid gap-5 lg:grid-cols-2">
             <div className="rounded-2xl border border-brand-line bg-brand-paper p-6">
-              <h3 className="text-base font-bold text-brand-deep">What this build is</h3>
+              <h3 className="text-base font-bold text-brand-deep">Live now</h3>
               <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-brand-ink/70">
                 {[
-                  "Every screen of the full platform, designed and built.",
-                  "A working national map with real Philippine boundary data.",
-                  "The complete report flow, with real validation.",
-                  "The public case record, the pipeline and the transparency dashboard.",
-                  "The full information architecture, so Phase 2 has somewhere to put a database.",
+                  "Report an environmental concern in four steps, with photographs, from a phone. Every report gets a permanent EARTH case number.",
+                  "A national map drawn from Philippine Statistics Authority boundary data, with every case pinned to its city or municipality.",
+                  "A public case register: documented 2026 incidents from published reporting, with their sources, alongside reports filed here.",
+                  "A six-step status pipeline on every case, from Reported to Monitoring, so anyone can see where it stands.",
+                  "The transparency dashboard, where every counter is computed from the cases and missions on the site.",
                 ].map((line) => (
                   <li key={line} className="flex gap-2.5">
                     <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand-primary" />
@@ -230,18 +196,18 @@ export default function AboutPage() {
               </ul>
             </div>
 
-            <div className="rounded-2xl border border-status-referred/30 bg-status-referred/[0.06] p-6">
-              <h3 className="text-base font-bold text-status-referred-text">What it is not, yet</h3>
+            <div className="rounded-2xl border border-brand-line bg-brand-surface p-6">
+              <h3 className="text-base font-bold text-brand-deep">Coming next</h3>
               <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-brand-ink/75">
                 {[
-                  "There is no database. Nothing you submit is stored or sent.",
-                  "There are no accounts, and no logins for agencies or partners.",
-                  "Photographs and video cannot be uploaded.",
-                  "Every case, mission, count and organisation shown is sample data.",
-                  "Lesson content is written in Phase 4, with teachers.",
+                  "Verification workflow: filed reports checked, merged with duplicates and referred to the responsible office from inside the platform.",
+                  "Agency and partner logins, so an office can acknowledge and update the cases referred to it.",
+                  "Case updates by email and text to reporters who asked for them.",
+                  "SMS and offline reporting for barangays with poor mobile data.",
+                  "Learning tracks written with teachers, and the EARTH Score counted from missions logged on the platform.",
                 ].map((line) => (
                   <li key={line} className="flex gap-2.5">
-                    <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-status-referred" />
+                    <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand-signal-600" />
                     {line}
                   </li>
                 ))}
@@ -250,7 +216,7 @@ export default function AboutPage() {
           </div>
 
           <ArrowLink href="/track" className="mt-10">
-            See how the platform would report on itself
+            See how the platform reports on itself
           </ArrowLink>
         </div>
       </section>

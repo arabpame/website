@@ -86,6 +86,15 @@ export interface CaseUpdate {
   note: string;
 }
 
+/** A published article or official release that documents a case or mission. */
+export interface SourceLink {
+  outlet: string;
+  title: string;
+  url: string;
+  /** ISO date of publication. */
+  date: string;
+}
+
 export interface EarthCase {
   /** The EARTH Case Number. Format EARTH-YYYY-NNNN. Permanent, never reused. */
   caseNumber: string;
@@ -119,8 +128,16 @@ export interface EarthCase {
     label: string;
     value: string;
   }[];
-  /** Number of evidence files attached. The files themselves are Phase 2. */
+  /** Number of evidence files attached. */
   evidenceCount: number;
+  /**
+   * Where the case came from. "report" is a real report filed through the
+   * Report page. Absent or "sample" is design-build sample data. The site marks
+   * the difference wherever a case is shown.
+   */
+  source?: "sample" | "report" | "news";
+  /** Public documentation of the case, shown on its page. */
+  sources?: SourceLink[];
 }
 
 // ---------------------------------------------------------------------------
@@ -163,6 +180,10 @@ export interface Mission {
     label: string;
     value: string;
   }[];
+  /** How to join: a URL, a page, an email, or a sentence. Shown when capacity is not tracked here. */
+  registration?: string;
+  /** Public announcements of the mission. */
+  sources?: SourceLink[];
 }
 
 // ---------------------------------------------------------------------------
@@ -232,7 +253,7 @@ export interface Partner {
 export interface ScoreEntry {
   rank: number;
   name: string;
-  kind: "barangay" | "school" | "organisation";
+  kind: "barangay" | "school" | "organisation" | "municipality";
   municipality: string;
   province: string;
   points: number;

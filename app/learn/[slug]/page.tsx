@@ -159,7 +159,7 @@ export default async function TrackPage({ params }: { params: Promise<{ slug: st
 
               <div className="mt-8 rounded-2xl border border-status-referred/30 bg-status-referred/[0.07] p-5">
                 <p className="text-sm font-bold text-status-referred-text">
-                  Lesson content is Phase 4
+                  Lesson content in preparation
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-brand-ink/75">
                   The structure, sequencing, formats and assessment design are complete and shown here

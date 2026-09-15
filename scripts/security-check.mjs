@@ -193,15 +193,51 @@ const vercelPath = join(root, "vercel.json");
 if (!existsSync(vercelPath)) {
   fail("vercel.json is missing. The house security headers live there.");
 } else {
-  const vercel = readFileSync(vercelPath, "utf8");
-  for (const header of [
-    "X-Content-Type-Options",
-    "X-Frame-Options",
-    "Referrer-Policy",
-    "Permissions-Policy",
-    "Strict-Transport-Security",
-  ]) {
-    if (!vercel.includes(header)) fail(`vercel.json is missing the ${header} header.`, "vercel.json");
+  const raw = readFileSync(vercelPath, "utf8");
+
+  // Parse it, do not merely search it. This check used to do a substring match on the
+  // raw text, which passed happily on a vercel.json that no parser could read: a "\."
+  // in a header source is a legal regex but an illegal JSON escape, so the whole file
+  // was invalid and Vercel silently applied none of it. Nothing else catches this,
+  // because next build never reads vercel.json. Only Vercel does.
+  let vercel = null;
+  try {
+    vercel = JSON.parse(raw);
+  } catch (error) {
+    fail(
+      `vercel.json is not valid JSON, so Vercel will apply none of it: ${error.message}. ` +
+        'A backslash in a header "source" regex must be doubled, for example "\\\\." not "\\.".',
+      "vercel.json",
+    );
+  }
+
+  if (vercel) {
+    // Collect the header keys Vercel would actually serve, rather than any string that
+    // happens to appear in the file.
+    const present = new Set();
+    for (const rule of Array.isArray(vercel.headers) ? vercel.headers : []) {
+      for (const header of Array.isArray(rule.headers) ? rule.headers : []) {
+        if (header && typeof header.key === "string") present.add(header.key);
+      }
+    }
+
+    for (const header of [
+      "X-Content-Type-Options",
+      "X-Frame-Options",
+      "Referrer-Policy",
+      "Permissions-Policy",
+      "Strict-Transport-Security",
+    ]) {
+      if (!present.has(header)) fail(`vercel.json is missing the ${header} header.`, "vercel.json");
+    }
+
+    // A build command that skips the gates defeats the point of having them.
+    const build = typeof vercel.buildCommand === "string" ? vercel.buildCommand : "";
+    for (const gate of ["qa", "grammar", "security"]) {
+      if (!build.includes(`npm run ${gate}`)) {
+        fail(`vercel.json buildCommand no longer runs npm run ${gate}.`, "vercel.json");
+      }
+    }
   }
 }
 

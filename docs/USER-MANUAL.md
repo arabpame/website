@@ -1,7 +1,7 @@
 # EARTHLINK Philippines. Owner's manual
 
 For the person who runs the site and does not write code. Everything here is a click, a
-paste, or a message to the developer. Last updated 16 September 2026.
+paste, or a message to the developer. Last updated 17 September 2026.
 
 Live site: **https://earthlinkph.vercel.app**
 Older link that still works: https://earthlink-ebon.vercel.app

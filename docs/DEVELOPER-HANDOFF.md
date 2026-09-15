@@ -1,7 +1,7 @@
 # EARTHLINK Philippines. Developer handoff
 
 Everything the next developer, or the next AI session, needs to continue confidently. Read
-this and `README.md` before changing anything. Last updated 16 September 2026.
+this and `README.md` before changing anything. Last updated 17 September 2026.
 
 **Client:** Adam Tryler Guttierez, founder, referred to as Direk. **Built by:** Erick Cabal,
 Erick Cabal Web Studio (Enclave). **Project folder:** `33. Earthlink Philippines`. **Dev
@@ -266,7 +266,7 @@ tested the same day. A Playwright pass on `/report` is the highest-value test to
 | Every public address is the founder's Gmail | Low | Decided 17 September 2026 as the interim. When a domain exists: verify it in Resend, set `FROM_EMAIL`, and change the three addresses in `lib/constants.ts` `CONTACT`. |
 | No verification screen | Medium | Status changes happen in the Supabase Table Editor. `referred_to` and timeline notes for filed reports are not editable yet. |
 | Documented cases are frozen at research date | Low | Edit `data/source/*.json` and rebuild when a case moves on. |
-| Mobile Lighthouse performance 55 on the home page | Medium | Main-thread work from the hero map SVG and the page weight of the founder photograph. Desktop is 77. Options: lazy-render the hero map below the fold, ship a smaller hero image for phones. |
+| Mobile Lighthouse performance 70 on the home page, and a 0.48 layout-shift reading | Low | After 17 September 2026: desktop scores 100 across performance, accessibility, best practices and SEO; mobile 70 / 100 / 100 / 100. Lighthouse attributes a 0.48 layout shift on mobile to the footer, far below the fold, with the same value on every run; no jump is visible when scrolling a real phone, and deferring sections with content-visibility made it worse, so that was removed. Remaining mobile cost is the hero photograph and the inline map SVG. Options: a smaller phone-only hero image, and rendering the hero map client-side after idle. |
 | ESLint pinned to 9.39.5 | Low | ESLint 10 breaks `eslint-plugin-react` inside `eslint-config-next` 16. `npm audit` is clean. |
 | Tailwind 4, TypeScript 7, `@types/node` 26 available | Low | Major upgrades, none security. Tailwind 4 changes the token convention; do not upgrade casually. |
 | `PRIVATE-NOTES.md` is not in git | Medium | Carry it by hand to a new laptop with `.env.local`. |

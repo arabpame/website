@@ -1,0 +1,13 @@
+# Force LF in the repository. Without this, Windows and macOS produce whole-file
+# phantom diffs and every git diff becomes unreadable.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary

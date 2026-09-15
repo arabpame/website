@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Semantic layer
+
+   Components describe intent, not hex values. A palette change is an edit to
+   this block plus tailwind.config.ts, not a find-and-replace across the app.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --surface: theme(colors.brand.paper);
+    --surface-raised: theme(colors.brand.surface);
+    --surface-deep: theme(colors.brand.ink);
+    --text-primary: theme(colors.brand.ink);
+    --text-heading: theme(colors.brand.deep);
+    --border-subtle: theme(colors.brand.line);
+    --focus-ring: theme(colors.brand.signal.600);
+  }
+
+  html {
+    /*
+     * The root scale is 100%, deliberately.
+     *
+     * The studio's gym project scales this to 95% to pull the whole rem scale
+     * down, and it works there. It was tried here and removed after an audit: at
+     * 95% the eyebrow labels measured 10.4px and the smallest data labels 9.5px
+     * on a phone. EARTHLINK's audience includes barangay and LGU staff who are
+     * not all in their twenties, and a civic platform that is hard to read has
+     * failed at its first job.
+     *
+     * Keeping this at 100% also means a size written in the code is the size that
+     * renders, which removes a whole category of confusion.
+     */
+    scroll-behavior: smooth;
+    /* Sticky header height plus breathing room, so an anchored heading is never
+       hidden behind the header. WCAG 2.2, 2.4.11. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-brand-paper font-body text-brand-ink antialiased;
+    /* Body copy is never full black. 75 percent of the ink colour. */
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Display face assigned once, here, never per component. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-bold text-brand-deep;
+    text-wrap: balance;
+  }
+
+  /* Paragraph widows look worse than a slightly short last line. */
+  p {
+    text-wrap: pretty;
+  }
+
+  /* iOS Safari zooms the viewport when a focused input is under 16px. Pin these
+     back to 16px after the 95% root scale. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Tap targets. WCAG 2.2 requires 24x24; 44px is the comfortable target. */
+  button,
+  a.btn,
+  [role="button"] {
+    min-height: 44px;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-signal-600 ring-offset-2 ring-offset-brand-paper;
+  }
+
+  /* On the dark data bands the offset has to match that ground instead. */
+  .on-ink :focus-visible {
+    @apply ring-brand-signal ring-offset-brand-ink;
+  }
+
+  ::selection {
+    @apply bg-brand-signal text-brand-ink;
+  }
+
+  /* Numbers in tables and counters must not jitter as they change. */
+  .font-data,
+  [class*="font-data"] {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ==========================================================================
+   Component layer
+   ========================================================================== */
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-300 ease-expo;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-primary text-white hover:bg-brand-primary-600 active:bg-brand-primary-700;
+  }
+
+  /* Chartreuse on the dark ground. Ink label, 12.70:1. */
+  .btn-signal {
+    @apply btn bg-brand-signal text-brand-ink hover:bg-brand-signal-400 active:bg-brand-signal-600;
+  }
+
+  .btn-outline {
+    @apply btn border border-brand-line bg-transparent text-brand-ink hover:border-brand-primary hover:bg-white;
+  }
+
+  .btn-outline-ink {
+    @apply btn border border-white/25 bg-transparent text-white hover:border-brand-signal hover:text-brand-signal;
+  }
+
+  .card {
+    @apply rounded-2xl border border-brand-line bg-brand-surface p-6 shadow-soft;
+  }
+
+  /* The one eyebrow. Tracking fixed at 0.22em for the whole project. */
+  .eyebrow {
+    @apply font-data text-[0.6875rem] font-medium uppercase tracking-eyebrow text-brand-primary;
+  }
+
+  .eyebrow-ink {
+    @apply font-data text-[0.6875rem] font-medium uppercase tracking-eyebrow text-brand-signal;
+  }
+
+  /* The only horizontal divider used site-wide. */
+  .rule {
+    @apply h-px w-12 bg-brand-signal-600;
+  }
+
+  .rule-ink {
+    @apply h-px w-12 bg-brand-signal;
+  }
+
+  .section {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+
+  .prose-body {
+    @apply max-w-prose text-base leading-relaxed text-brand-ink/75;
+  }
+
+  .prose-body-ink {
+    @apply max-w-prose text-base leading-relaxed text-brand-paper/70;
+  }
+
+  /* Skip link. Visible only when focused. */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-ink focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-brand-signal;
+  }
+}
+
+/* ==========================================================================
+   Scroll reveal
+
+   Content is VISIBLE by default and only hides once JavaScript has confirmed it
+   can animate. No JavaScript, no problem. Crawler, no problem. A failed observer
+   cannot leave the page blank.
+   ========================================================================== */
+
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ==========================================================================
+   Decorative helpers
+   ========================================================================== */
+
+/* Grain, used on the dark map field and on photo placeholders so a flat fill
+   does not read as a missing asset. Decorative, always aria-hidden. */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
+/* Edge-masked marquee, so the strip fades rather than clipping hard. */
+.marquee-mask {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-mask:hover [data-marquee] {
+  animation-play-state: paused;
+}
+
+/* Hairline grid for the dark data field. */
+.field-grid {
+  background-image:
+    linear-gradient(rgba(194, 242, 77, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 242, 77, 0.055) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ==========================================================================
+   Reduced motion
+
+   A blanket CSS rule rather than a JavaScript check, because a JavaScript check
+   misses hover transitions. WCAG 2.3.3.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html.js .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
